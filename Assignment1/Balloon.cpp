@@ -9,6 +9,11 @@ const GLfloat ctrlpoints[4][3] = { // 4 points to define a cubic Bezier curve
 { 0, -110, 0.0 }, // Point 2
 { 0, -45, 0.0 } };
 
+Balloon::Balloon(GLfloat x, GLfloat y) : GameObject(x, y)
+{
+	this->Scale = 0.5f;
+}
+
 void Balloon::Draw()
 {
 	glColor3ub(59, 204, 176);
@@ -23,7 +28,7 @@ void Balloon::Draw()
 	glColor3ub(255, 255, 255);
 	NaiveEngineUtil::DrawCircle(0, 0, 25, &circleArgs);
 
-#ifdef _DEBUG // Debug control points
+#ifdef _DEBUG_CTRL_POINTS // Debug control points
 	glPointSize(5.0);
 	glColor3f(1.0, 1.0, 0.0);
 	glBegin(GL_POINTS);
@@ -37,7 +42,7 @@ void Balloon::Draw()
 	glLineWidth(1);
 	glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
 	glEnable(GL_MAP1_VERTEX_3); // Enable the evaluator.
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3ub(1, 1, 1);
 	glBegin(GL_LINE_STRIP);
 	for (int i = 0; i <= 50; i++) {
 		/* glEvalCoord1f evaluates the one-dimensional maps that are enabled.

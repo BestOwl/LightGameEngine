@@ -7,8 +7,10 @@ class Balloon :
     public GameObject
 {
 public:
+    Balloon(GLfloat x, GLfloat y);
+
     virtual void Draw();
     virtual bool Tick();
-    using GameObject::GameObject;
+    
 };
 
