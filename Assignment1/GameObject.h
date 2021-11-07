@@ -98,6 +98,7 @@ namespace NaiveEngine
 		/// <param name="x">Init x pos</param>
 		/// <param name="y">Init y pos</param>
 		GameObject(GLfloat x, GLfloat y);
+		~GameObject();
 
 	protected:
 		GLfloat x;

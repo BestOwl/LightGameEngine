@@ -93,3 +93,14 @@ GameObject::GameObject(GLfloat x, GLfloat y)
 	this->y = y;
 	this->ChildrenObjects = std::vector<GameObject*>();
 }
+
+GameObject::~GameObject()
+{
+	for (GameObject* childrenObj : this->ChildrenObjects)
+	{
+		if (childrenObj)
+		{
+			delete childrenObj;
+		}
+	}
+}
