@@ -98,6 +98,11 @@ bool Firework::Tick()
 		Explode();
 		this->state = FireworkState::Drop;
 		break;
+	case FireworkState::Drop:
+		if (this->ChildrenObjects.size() == 0)
+		{
+			this->IsDestroyed = true;
+		}
 	default:
 		break;
 	}
