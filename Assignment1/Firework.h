@@ -1,7 +1,15 @@
 #pragma once
 #include "GameObject.h"
+#include "Particle.h"
 
 using namespace NaiveEngine;
+
+enum FireworkState
+{
+    Flying,
+    Explode,
+    Drop
+};
 
 class Firework :
     public GameObject
@@ -12,9 +20,11 @@ public:
     virtual bool Tick();
 
 private:
-    const GLint flyHeight = 200;
-    unsigned char state = 0;
+    const GLint flyHeight = 50;
+    FireworkState state = Flying;
     GLfloat initalX;
     GLfloat initalY;
+
+    void Explode();
 };
 

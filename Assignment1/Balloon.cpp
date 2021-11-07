@@ -56,6 +56,10 @@ bool Balloon::Tick()
 		this->y++;
 		return true;
 	}
+	else
+	{
+		this->IsDestroyed = true;
+		return false;
 
-	return false;
+	}
 }

@@ -50,23 +50,12 @@ int main(int argc, char** argv) {
 	glutInitWindowSize(viewingWidth, viewingHeight);
 	glutCreateWindow("XJTLU 15th Anniversary");
 
-	LiverpoolPavilion objLiverpoolPavilion = LiverpoolPavilion(-240, -220);
-	sceneObjects.push_back(&objLiverpoolPavilion);
-
-	CentralBuilding objCentralBuilding = CentralBuilding(100, -150);
-	sceneObjects.push_back(&objCentralBuilding);
-
-	Balloon objBalloon = Balloon(300, -100);
-	sceneObjects.push_back(&objBalloon);
-
-	HandHeldWindmill objWindmill = HandHeldWindmill(-150, 150);
-	sceneObjects.push_back(&objWindmill);
-
-	Cloud objCloud = Cloud(-320, 250);
-	sceneObjects.push_back(&objCloud);
-
-	Firework objFirework = Firework(-250, 0);
-	sceneObjects.push_back(&objFirework);
+	sceneObjects.push_back(new LiverpoolPavilion(-240, -220));
+	sceneObjects.push_back(new CentralBuilding(100, -150));
+	sceneObjects.push_back(new Balloon(300, -100));
+	sceneObjects.push_back(new HandHeldWindmill(-150, 150));
+	sceneObjects.push_back(new Cloud(-320, 250));
+	sceneObjects.push_back(new Firework(-250, 0));
 
 	sceneObjects.push_back(&objPlayer);
 
@@ -76,6 +65,25 @@ int main(int argc, char** argv) {
 	glutTimerFunc(tick_interval, OnTimer, 1);
 
 	glutMainLoop();
+}
+
+void RenderGameObject(GameObject* obj)
+{
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glTranslatef(obj->GetX(), obj->GetY(), 0);
+	glRotatef(obj->RotateX, 1, 0, 0);
+	glRotatef(obj->RotateY, 0, 1, 0);
+	glRotatef(obj->RotateZ, 0, 0, 1);
+	glScalef(obj->Scale, obj->Scale, 1);
+	obj->Draw();
+
+	for (GameObject* children : obj->ChildrenObjects)
+	{
+		RenderGameObject(children);
+	}
+
+	glPopMatrix();
 }
 
 void RenderScene()
@@ -147,11 +155,7 @@ void RenderScene()
 	// draw foreground object
 	for (GameObject* obj : sceneObjects)
 	{
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glTranslatef(obj->getX(), obj->getY(), 0);
-		obj->Draw();
-		glPopMatrix();
+		RenderGameObject(obj);
 	}
 
 	glColor3ub(255, 255, 255);
@@ -162,14 +166,58 @@ void RenderScene()
 	glFlush();
 }
 
+bool TickObject(GameObject* obj)
+{
+	bool dirty = false;
+
+	if (obj->Tick())
+	{
+		dirty = true;
+	}
+
+	auto i_childrenObj = begin(obj->ChildrenObjects);
+	while (i_childrenObj != end(obj->ChildrenObjects))
+	{
+		if ((*i_childrenObj)->IsDestroyed)
+		{
+			GameObject* p_oldChildrenObj = *i_childrenObj;
+			i_childrenObj = obj->ChildrenObjects.erase(i_childrenObj);
+			delete p_oldChildrenObj;
+		}
+		else
+		{
+			if (TickObject(*i_childrenObj))
+			{
+				dirty = true;
+			}
+			++i_childrenObj;
+		}
+	}
+
+	return dirty;
+}
+
 void OnTimer(int value)
 {
 	bool dirty = false;
-	for (GameObject* obj : sceneObjects)
+	
+	auto i_obj = begin(sceneObjects);
+	while (i_obj != end(sceneObjects))
 	{
-		if (obj->Tick())
+		if ((*i_obj)->IsDestroyed)
 		{
-			dirty = true;
+			GameObject* p_oldObj = *i_obj;
+			i_obj = sceneObjects.erase(i_obj);
+			delete p_oldObj;
+		}
+		else 
+		{
+			if (TickObject(*i_obj))
+			{
+				dirty = true;
+			}
+
+			++i_obj;
 		}
 	}
 
@@ -190,16 +238,16 @@ void OnSpecialKeyEvent(int key, int x, int y)
 	switch (key)
 	{
 	case GLUT_KEY_UP: // Move Up
-		objPlayer.SetY(objPlayer.getY() + player_movement_step);
+		objPlayer.SetY(objPlayer.GetY() + player_movement_step);
 		dirty = true;
 		break;
 	case GLUT_KEY_DOWN: // Move Down
-		objPlayer.SetY(objPlayer.getY() - player_movement_step);
+		objPlayer.SetY(objPlayer.GetY() - player_movement_step);
 		dirty = true;
 		break;
 	case GLUT_KEY_RIGHT: // Move Right
-		objPlayer.SetX(objPlayer.getX() + player_movement_step);
-		offset = orthoR + viewingOffsetX - objPlayer.getX();
+		objPlayer.SetX(objPlayer.GetX() + player_movement_step);
+		offset = orthoR + viewingOffsetX - objPlayer.GetX();
 		if (offset < 100)
 		{
 			viewingOffsetX += player_movement_step;
@@ -212,8 +260,8 @@ void OnSpecialKeyEvent(int key, int x, int y)
 		dirty = true;
 		break;
 	case GLUT_KEY_LEFT: // Move Left
-		objPlayer.SetX(objPlayer.getX() - player_movement_step);
-		offset = objPlayer.getX() - (orthoL + viewingOffsetX);
+		objPlayer.SetX(objPlayer.GetX() - player_movement_step);
+		offset = objPlayer.GetX() - (orthoL + viewingOffsetX);
 		if (offset < 100)
 		{
 			viewingOffsetX -= player_movement_step;
