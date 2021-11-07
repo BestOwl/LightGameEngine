@@ -18,17 +18,20 @@
 #include "Cloud.h"
 #include "Firework.h"
 
-using namespace std;
 using namespace NaiveEngine;
 
 const int tick_interval = 16; // declare refresh interval in ms
+const int animation_interval = 2000;
 
 void RenderScene();
+void Reshape(int w, int h);
 void OnTimer(int value);
+void OnAnimationTimer(int value);
 void OnSpecialKeyEvent(int key, int x, int y);
+void OnKeyEvent(unsigned char key, int x, int y);
 
-vector<GameObject*> sceneObjects = vector<GameObject*>();
-
+std::vector<GameObject*> sceneObjects = std::vector<GameObject*>();
+bool zoom = false;
 PlayerLiverBird objPlayer = PlayerLiverBird(0, 0);
 
 const GLint viewingWidth = 800;
@@ -44,23 +47,34 @@ const GLint viewingOffsetXmin = 0;
 const GLint viewingOffsetYmax = 0;
 const GLint viewingOffsetYmin = 0;
 
+void ShowUserGuide()
+{
+	MessageBox(NULL, L"Welcome to this game\n\n W or left arrow - move to left\nD or right arrow - move to right\n Space - fly\n z - Zoom toggle\n\nPress F1 to see this guide again.", L"User Guide - Fly me to the XJTLU: 15th Anniversary Edition", MB_OK);
+}
+
 int main(int argc, char** argv) {
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
 	glutInitWindowSize(viewingWidth, viewingHeight);
-	glutCreateWindow("XJTLU 15th Anniversary");
+	glutCreateWindow("Fly me to the XJTLU: 15th Anniversary Edition - Press F1 to see the User Guide");
 
+	sceneObjects.push_back(new Cloud(-320, 250));
+	sceneObjects.push_back(new Cloud(-120, 200));
+	sceneObjects.push_back(new Cloud(100, 180));
+	sceneObjects.push_back(new Cloud(450, 240));
 	sceneObjects.push_back(new LiverpoolPavilion(-240, -220));
 	sceneObjects.push_back(new CentralBuilding(100, -150));
-	sceneObjects.push_back(new Balloon(300, -100));
-	sceneObjects.push_back(new HandHeldWindmill(-150, 150));
-	sceneObjects.push_back(new Cloud(-320, 250));
-	sceneObjects.push_back(new Firework(-250, 0));
+	sceneObjects.push_back(new HandHeldWindmill(-50, -100));
+	sceneObjects.push_back(new HandHeldWindmill(400, -80));
+	sceneObjects.push_back(new HandHeldWindmill(650, -90));
 
-	sceneObjects.push_back(&objPlayer);
+	OnAnimationTimer(0);
 
 	glutDisplayFunc(RenderScene);
 	glutSpecialFunc(OnSpecialKeyEvent);
+	glutKeyboardFunc(OnKeyEvent);
+	glutReshapeFunc(Reshape);
 	//glutIdleFunc(IdleDisplay);
 	glutTimerFunc(tick_interval, OnTimer, 1);
 
@@ -98,6 +112,15 @@ void RenderScene()
 		orthoR + viewingOffsetX, 
 		orthoB + viewingOffsetY, 
 		orthoT + viewingOffsetY);
+
+	if (zoom)
+	{
+		glViewport(std::max(-(objPlayer.GetX() + 400), -800.0f), -(objPlayer.GetY() + 300), viewingWidth * 2, viewingHeight * 2);
+	}
+	else 
+	{
+		glViewport(0, 0, viewingWidth, viewingHeight);
+	}
 
 #pragma region render background
 
@@ -163,7 +186,14 @@ void RenderScene()
 	NaiveEngineUtil::Select2dStringFont(48, ANSI_CHARSET, "Comic Sans MS");
 	NaiveEngineUtil::Draw2dString(0, 250, "XJTLU 15th Anniversary");
 
+	RenderGameObject(&objPlayer);
+
 	glFlush();
+}
+
+void Reshape(int w, int h)
+{
+	glutReshapeWindow(viewingWidth, viewingHeight);
 }
 
 bool TickObject(GameObject* obj)
@@ -221,6 +251,8 @@ void OnTimer(int value)
 		}
 	}
 
+	TickObject(&objPlayer);
+
 	if (dirty)
 	{
 		glutPostRedisplay();
@@ -229,49 +261,93 @@ void OnTimer(int value)
 	glutTimerFunc(tick_interval, OnTimer, 1);
 }
 
+void OnAnimationTimer(int value)
+{
+	int i = value * 200;
+	srand(time(NULL) + i);
+	for (int i = 0; i < 6; i++)
+	{
+		GLint x = rand() % viewingWidth + viewingOffsetX - viewingWidth / 2;
+		GLint y = rand() % (viewingHeight / 2) - 300;
+		Color color
+		{
+			rand() % 255,
+			rand() % 255,
+			rand() % 255,
+		};
+		if (value)
+		{
+			sceneObjects.push_back(new Balloon(x, y, color));
+		}
+		else 
+		{
+			GLint flyHeight = rand() % 300 + 100;
+			
+			sceneObjects.push_back(new Firework(x, y, color, flyHeight));
+		}
+
+	}
+
+	glutTimerFunc(animation_interval, OnAnimationTimer, !value);
+}
+
+static int player_movement_step = 10;
+void MovePlayerLeft()
+{
+	objPlayer.SetX(objPlayer.GetX() - player_movement_step);
+	GLint offset = objPlayer.GetX() - (orthoL + viewingOffsetX);
+	if (offset < 100)
+	{
+		viewingOffsetX -= player_movement_step;
+		if (viewingOffsetX < viewingOffsetXmin)
+		{
+			viewingOffsetX = viewingOffsetXmin;
+		}
+	}
+}
+
+void MovePlayerRight()
+{
+	objPlayer.SetX(objPlayer.GetX() + player_movement_step);
+	GLint offset = orthoR + viewingOffsetX - objPlayer.GetX();
+	if (offset < 100)
+	{
+		viewingOffsetX += player_movement_step;
+		if (viewingOffsetX > viewingOffsetXmax)
+		{
+			viewingOffsetX = viewingOffsetXmax;
+		}
+	}
+}
+
 void OnSpecialKeyEvent(int key, int x, int y)
 {
-	static int player_movement_step = 10;
+	//static int player_movement_step = 10;
 	bool dirty = false;
 
 	GLint offset;
 	switch (key)
 	{
-	case GLUT_KEY_UP: // Move Up
-		objPlayer.SetY(objPlayer.GetY() + player_movement_step);
-		dirty = true;
-		break;
-	case GLUT_KEY_DOWN: // Move Down
-		objPlayer.SetY(objPlayer.GetY() - player_movement_step);
-		dirty = true;
-		break;
+	//case GLUT_KEY_UP: // Move Up
+	//	objPlayer.SetY(objPlayer.GetY() + player_movement_step);
+	//	dirty = true;
+	//	break;
+	//case GLUT_KEY_DOWN: // Move Down
+	//	objPlayer.SetY(objPlayer.GetY() - player_movement_step);
+	//	dirty = true;
+	//	break;
 	case GLUT_KEY_RIGHT: // Move Right
-		objPlayer.SetX(objPlayer.GetX() + player_movement_step);
-		offset = orthoR + viewingOffsetX - objPlayer.GetX();
-		if (offset < 100)
-		{
-			viewingOffsetX += player_movement_step;
-			if (viewingOffsetX > viewingOffsetXmax)
-			{
-				viewingOffsetX = viewingOffsetXmax;
-			}
-		}
+		MovePlayerRight();
 		
 		dirty = true;
 		break;
 	case GLUT_KEY_LEFT: // Move Left
-		objPlayer.SetX(objPlayer.GetX() - player_movement_step);
-		offset = objPlayer.GetX() - (orthoL + viewingOffsetX);
-		if (offset < 100)
-		{
-			viewingOffsetX -= player_movement_step;
-			if (viewingOffsetX < viewingOffsetXmin)
-			{
-				viewingOffsetX = viewingOffsetXmin;
-			}
-		}
+		MovePlayerLeft();
 
 		dirty = true;
+		break;
+	case GLUT_KEY_F1:
+		ShowUserGuide();
 		break;
 	default:
 		break;
@@ -280,8 +356,29 @@ void OnSpecialKeyEvent(int key, int x, int y)
 	if (dirty)
 	{
 		glutPostRedisplay();
+	}
+}
 
-		
+void OnKeyEvent(unsigned char key, int x, int y)
+{
+	switch (key)
+	{
+	case ' ':
+		objPlayer.VelocityY += 5;
+		break;
+	case 'z':
+		zoom = !zoom;
+		glutPostRedisplay();
+	case 'a':
+	case 'A':
+		MovePlayerLeft();
+		break;
+	case 'd':
+	case 'D':
+		MovePlayerRight();
+		break;
+	default:
+		break;
 	}
 }
 

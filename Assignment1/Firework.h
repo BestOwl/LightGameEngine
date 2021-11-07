@@ -11,16 +11,20 @@ enum FireworkState
     Drop
 };
 
+typedef ParticleColor FireworkColor;
+
 class Firework :
     public GameObject
 {
 public:
-    Firework(GLfloat x, GLfloat y);
+    Firework(GLfloat x, GLfloat y, FireworkColor fireworkColor, GLint flyHeight = 50);
     virtual void Draw();
     virtual bool Tick();
 
 private:
-    const GLint flyHeight = 50;
+    GLint flyHeight;
+    FireworkColor fireworkColor;
+
     FireworkState state = Flying;
     GLfloat initalX;
     GLfloat initalY;

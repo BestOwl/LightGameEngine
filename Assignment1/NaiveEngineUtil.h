@@ -9,6 +9,12 @@
 namespace NaiveEngine
 {
 
+	typedef struct {
+		unsigned char r;
+		unsigned char g;
+		unsigned char b;
+	} Color;
+
 	typedef struct DrawCircleArgs
 	{
 		GLfloat startAngle;

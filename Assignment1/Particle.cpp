@@ -1,13 +1,15 @@
 #include "Particle.h"
 
-NaiveEngine::Particle::Particle(GLfloat x, GLfloat y, GLint dissolveTime) : GameObject(x, y)
+NaiveEngine::Particle::Particle(GLfloat x, GLfloat y, GLint dissolveTime, ParticleColor color) : GameObject(x, y)
 {
 	this->dissolveTime = dissolveTime;
+	this->color = color;
 }
 
 void NaiveEngine::Particle::Draw()
 {
 	glBegin(GL_POINTS);
+	glColor3ub(this->color.r, this->color.g, this->color.b);
 
 	glVertex2f(0, 0);
 

@@ -12,6 +12,13 @@ namespace NaiveEngine
 
 		void SetX(GLfloat newX);
 		void SetY(GLfloat newY);
+
+	protected:
+		bool hasMovementLimit = false;
+		GLint xMax = 0;
+		GLint xMin = 0;
+		GLint yMax = 0;
+		GLint yMin = 0;
 	};
 }
 

@@ -5,10 +5,12 @@
 
 constexpr int particleAmount = 1;
 
-Firework::Firework(GLfloat x, GLfloat y) : GameObject(x, y)
+Firework::Firework(GLfloat x, GLfloat y, FireworkColor fireworkColor, GLint flyHeight) : GameObject(x, y)
 {
 	this->initalX = x;
 	this->initalY = y;
+	this->flyHeight = flyHeight;
+	this->fireworkColor = fireworkColor;
 }
 
 void Firework::Explode()
@@ -31,9 +33,9 @@ void Firework::Explode()
 	//GLfloat initV = 10;
 	for (int i = 0; i < 90; i++)
 	{
-		GLint initV = rand() % 10;
+		GLint initV = rand() % 20;
 		int degree = i * 4;
-		Particle* particle = new Particle(0, 0, 100);
+		Particle* particle = new Particle(0, 0, 100, this->fireworkColor);
 		particle->IsPhysicsEnabled = true;
 		particle->VelocityX = cos(degree * M_PI / 180) * initV;
 		particle->VelocityY = sin(degree * M_PI / 180) * initV;
@@ -73,7 +75,7 @@ void Firework::Draw()
 
 		break;
 	case 2:
-		glPointSize(2);
+		glPointSize(3);
 		break;
 	default:
 		break;

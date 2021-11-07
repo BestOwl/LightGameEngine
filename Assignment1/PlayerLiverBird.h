@@ -7,12 +7,14 @@ class PlayerLiverBird :
     public Player
 {
 public:
-    using Player::Player;
+    PlayerLiverBird(GLfloat x, GLfloat y);
     virtual void Draw();
+    virtual bool Tick();
 
     virtual void SetX(GLfloat newX);
 
 private:
     char rotateMode = 0;
+    GLfloat windDegree = 0;
 };
 

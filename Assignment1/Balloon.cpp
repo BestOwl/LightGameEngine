@@ -9,14 +9,16 @@ const GLfloat ctrlpoints[4][3] = { // 4 points to define a cubic Bezier curve
 { 0, -110, 0.0 }, // Point 2
 { 0, -45, 0.0 } };
 
-Balloon::Balloon(GLfloat x, GLfloat y) : GameObject(x, y)
+Balloon::Balloon(GLfloat x, GLfloat y, BalloonColor color) : GameObject(x, y)
 {
 	this->Scale = 0.5f;
+	this->color = color;
 }
 
 void Balloon::Draw()
 {
-	glColor3ub(59, 204, 176);
+	//glColor3ub(59, 204, 176);
+	glColor3ub(this->color.r, this->color.g, this->color.b);
 	DrawCircleArgs circleArgs = NaiveEngineUtil::GetDefaultDrawCircleArgs();
 	circleArgs.yFactor = 1.5;
 	NaiveEngineUtil::DrawCircle(0, 0, 30, &circleArgs);
