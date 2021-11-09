@@ -8,7 +8,8 @@ PlayerLiverBird::PlayerLiverBird(GLfloat x, GLfloat y) : Player(x, y)
 	this->xMax = 800;
 	this->xMin = -400;
 	this->yMax = 300;
-	this->yMin = -300;
+	this->yMin = -200;
+	this->Gravity = 0.05f;
 }
 
 void PlayerLiverBird::Draw()

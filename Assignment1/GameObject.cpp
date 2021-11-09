@@ -30,8 +30,7 @@ GLfloat GameObject::GetActualAccelerateX()
 GLfloat GameObject::GetActualAccelerateY()
 {
 	// origin AccelerateY - air drag - gravity
-	constexpr GLfloat gravity = 0.3f;
-	return this->AccelerateY - this->VelocityY * 0.1f - gravity;
+	return this->AccelerateY - this->VelocityY * 0.1f - this->Gravity;
 }
 
 GLfloat GameObject::GetAirDragForce(GLfloat velocity)

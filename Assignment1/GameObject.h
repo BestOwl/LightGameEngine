@@ -65,6 +65,8 @@ namespace NaiveEngine
 		GLfloat VelocityX = 0;
 		GLfloat VelocityY = 0;
 
+		GLfloat Gravity = 0.3f;
+
 		GLfloat AccelerateX = 0;
 		GLfloat AccelerateY = 0;
 
