@@ -28,10 +28,17 @@ namespace NaiveEngine
 	class NaiveEngineUtil
 	{
 	public:
+		static void Init();
+
+		static void SelectFont(int size, const char* face);
+		static void DrawString(std::wstring str);
+
 		static DrawCircleArgs GetDefaultDrawCircleArgs();
 		static void DrawCircle(GLfloat cx, GLfloat cy, GLfloat r, DrawCircleArgs* extraArgs);
-		static void Draw2dString(GLfloat x, GLfloat y, const char* str);
-		static void Select2dStringFont(int size, int charset, const char* face);
+
+		static void DrawRasterString(GLfloat x, GLfloat y, const char* str);
+		static void RasterStringSelectFont(int size, int charset, const char* face);
+
 	};
 
 }

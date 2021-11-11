@@ -59,6 +59,13 @@ int main(int argc, char** argv) {
 	glutInitWindowSize(viewingWidth, viewingHeight);
 	glutCreateWindow("Fly me to the XJTLU: 15th Anniversary Edition - Press F1 to see the User Guide");
 
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
+	NaiveEngineUtil::Init();
+	NaiveEngineUtil::SelectFont(16, "MSYHL.TTC");
+	//NaiveEngineUtil::DrawString("S");
+
 	sceneObjects.push_back(new Cloud(-320, 250));
 	sceneObjects.push_back(new Cloud(-120, 200));
 	sceneObjects.push_back(new Cloud(100, 180));
@@ -183,8 +190,8 @@ void RenderScene()
 
 	glColor3ub(255, 255, 255);
 	glShadeModel(GL_SMOOTH);
-	NaiveEngineUtil::Select2dStringFont(48, ANSI_CHARSET, "Comic Sans MS");
-	NaiveEngineUtil::Draw2dString(0, 250, "XJTLU 15th Anniversary");
+	NaiveEngineUtil::RasterStringSelectFont(48, ANSI_CHARSET, "Comic Sans MS");
+	NaiveEngineUtil::DrawRasterString(0, 250, "XJTLU 15th Anniversary");
 
 	RenderGameObject(&objPlayer);
 

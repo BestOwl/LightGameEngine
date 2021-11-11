@@ -27,7 +27,6 @@ namespace NaiveEngine
 		virtual GLfloat GetY();
 
 		virtual void SetX(GLfloat newX);
-
 		virtual void SetY(GLfloat newY);
 
 		/// <summary>
