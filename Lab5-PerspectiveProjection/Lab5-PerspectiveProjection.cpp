@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 	glutReshapeFunc(ChangeSize);
 	glutSpecialFunc(SpecialKeys);
 	glutDisplayFunc(RenderScene);
-	//SetupRC();
+	SetupRC();
 	glutMainLoop();
 	return 0;
 }
