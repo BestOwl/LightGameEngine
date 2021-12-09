@@ -34,45 +34,45 @@ void EngineUtil::Init()
 	}
 }
 
-void EngineUtil::SelectFont(int size, const char* face)
-{
-	std::string facePath;
-#ifdef _WIN32
-	IKnownFolderManager* pManager;
-	HRESULT hr = CoCreateInstance(CLSID_KnownFolderManager, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pManager));
-	if (SUCCEEDED(hr)) {
-	}
-	else {
-		_com_error err(hr);
-		throw err;
-	}
-
-	IKnownFolder* pFolder;
-	pManager->GetFolder(FOLDERID_Fonts, &pFolder);
-
-	LPWSTR wFolderPath = NULL;
-	pFolder->GetPath(KF_FLAG_DEFAULT, &wFolderPath);
-
-	std::wstring wsFolderPath(wFolderPath);
-
-	facePath = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(wsFolderPath);
-	facePath = facePath + "\\" + face;
-#elif __linux__
-	facePath = "/usr/share/fonts/truetype/" + face;
-#endif // _WIN32
-
-	FT_Error error = FT_New_Face(ft_lib,
-		facePath.c_str(),
-		0,
-		&ft_face);
-
-	FT_Set_Char_Size(
-		ft_face,    /* handle to face object           */
-		0,       /* char_width in 1/64th of points  */
-		size * 64,   /* char_height in 1/64th of points */
-		300,     /* horizontal device resolution    */
-		300);
-}
+//void EngineUtil::SelectFont(int size, const char* face)
+//{
+//	std::string facePath;
+//#ifdef _WIN32
+//	IKnownFolderManager* pManager;
+//	HRESULT hr = CoCreateInstance(CLSID_KnownFolderManager, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pManager));
+//	if (SUCCEEDED(hr)) {
+//	}
+//	else {
+//		_com_error err(hr);
+//		throw err;
+//	}
+//
+//	IKnownFolder* pFolder;
+//	pManager->GetFolder(FOLDERID_Fonts, &pFolder);
+//
+//	LPWSTR wFolderPath = NULL;
+//	pFolder->GetPath(KF_FLAG_DEFAULT, &wFolderPath);
+//
+//	std::wstring wsFolderPath(wFolderPath);
+//
+//	facePath = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(wsFolderPath);
+//	facePath = facePath + "\\" + face;
+//#elif __linux__
+//	facePath = "/usr/share/fonts/truetype/" + face;
+//#endif // _WIN32
+//
+//	FT_Error error = FT_New_Face(ft_lib,
+//		facePath.c_str(),
+//		0,
+//		&ft_face);
+//
+//	FT_Set_Char_Size(
+//		ft_face,    /* handle to face object           */
+//		0,       /* char_width in 1/64th of points  */
+//		size * 64,   /* char_height in 1/64th of points */
+//		300,     /* horizontal device resolution    */
+//		300);
+//}
 
 void DrawGlyphBitmap(int pen_x, int pen_y, wchar_t c)
 {

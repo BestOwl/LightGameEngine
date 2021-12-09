@@ -10,22 +10,41 @@
 #include <string>
 #include <wincodec.h>
 
-class Texture
+namespace LightGameEngine
 {
-public:
-	Texture(GLubyte* buffer, GLuint width, GLuint height, GLenum format);
-	~Texture();
+	class Texture
+	{
+	public:
+		Texture(GLubyte* buffer, GLuint width, GLuint height, GLenum format);
+		~Texture();
 
-	GLubyte* Buffer;
-	GLuint Width;
-	GLuint Height;
-	GLenum Format;
+		void BindTexture();
 
-	static Texture* LoadBmpTexture(const std::wstring& texturePath);
-	static Texture* LoadTexture(const std::wstring& texturePath);
-	static Texture* MakeErrorTexture();
+		GLubyte* Buffer;
+		GLuint Width;
+		GLuint Height;
+		GLenum Format;
 
-private:
-	static IWICImagingFactory* pWICFactory;
-};
+		static Texture* LoadTexture(const std::wstring& texturePath);
+		static Texture* MakeErrorTexture();
 
+		static IWICImagingFactory* GetWICFactory();
+
+	private:
+		static IWICImagingFactory* _pWICFactory;
+	};
+
+	class CubeTexture
+	{
+	public:
+		CubeTexture(const std::wstring& texturePath);
+		~CubeTexture();
+
+		Texture* Front;
+		Texture* Back;
+		Texture* Left;
+		Texture* Right;
+		Texture* Top;
+		Texture* Bottom;
+	};
+}

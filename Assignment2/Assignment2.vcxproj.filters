@@ -13,66 +13,78 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="GeometricPrimitives">
+      <UniqueIdentifier>{ed5585da-6f39-41d2-ba52-41feabc42e8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LightGameEngine">
+      <UniqueIdentifier>{89e870d0-c4b3-4d6b-a4bb-432459c13791}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineUtil.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Teapot.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineBasis.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CubeDemo.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Skybox.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
+    <ClCompile Include="Humanoid.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>GeometricPrimitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>LightGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineBasis.cpp">
+      <Filter>LightGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineUtil.cpp">
+      <Filter>LightGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>LightGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>LightGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>LightGameEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineUtil.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Teapot.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineBasis.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeDemo.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Skybox.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="Humanoid.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>GeometricPrimitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>LightGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineBasis.h">
+      <Filter>LightGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineUtil.h">
+      <Filter>LightGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>LightGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>LightGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>LightGameEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

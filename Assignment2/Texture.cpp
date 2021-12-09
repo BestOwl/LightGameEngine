@@ -12,7 +12,7 @@
 
 using namespace LightGameEngine;
 
-IWICImagingFactory* Texture::pWICFactory = nullptr;
+IWICImagingFactory* Texture::_pWICFactory = nullptr;
 
 Texture::Texture(GLubyte* buffer, GLuint width, GLuint height, GLenum format)
 {
@@ -27,42 +27,9 @@ Texture::~Texture()
 	delete this->Buffer;
 }
 
-Texture* Texture::LoadBmpTexture(const std::wstring& texturePath)
+void Texture::BindTexture()
 {
-	FILE* pFile = NULL;
-	_wfopen_s(&pFile, texturePath.c_str(), L"rb");
-
-	_ASSERT(pFile != NULL);
-
-	GLuint width;
-	GLuint height;
-
-	// get the width and height of image
-	// reposition stream position indicator
-	// SEEK_SET: Beginning of file
-	fseek(pFile, 0x0012, SEEK_SET); // skip 16 bits from beginning for bmp files
-	// get the width of image
-	fread(&width, sizeof(width), 1, pFile);
-	// get the height of image
-	fread(&height, sizeof(height), 1, pFile);
-
-	// count the length of in the image by pixel
-	// pixel data consists of three colors red, green and blue (Windows implement BGR)
-	GLint pixelLength = width * 3;
-	// pixel data width should be an integral multiple of 4, which is required by the .bmp file
-	while (pixelLength % 4 != 0)
-		pixelLength++;
-	// pixel data length = width * height
-	pixelLength *= height;
-
-	GLubyte* buffer = new GLubyte[pixelLength];
-
-	// read the data of image as pixel
-	fseek(pFile, 54, SEEK_SET);
-	fread(buffer, pixelLength, 1, pFile);
-	fclose(pFile);
-
-	return new Texture(buffer, width, height, GL_BGR_EXT);
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, this->Width, this->Height, 0, this->Format, GL_UNSIGNED_BYTE, this->Buffer);
 }
 
 Texture* Texture::LoadTexture(const std::wstring& texturePath)
@@ -74,10 +41,7 @@ Texture* Texture::LoadTexture(const std::wstring& texturePath)
 
 	try
 	{
-		if (pWICFactory == nullptr)
-		{
-			EngineUtil::ThrowIfFail(CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pWICFactory)));
-		}
+		IWICImagingFactory* pWICFactory = Texture::GetWICFactory();
 
 		EngineUtil::ThrowIfFail(pWICFactory->CreateDecoderFromFilename(
 			texturePath.c_str(),
@@ -103,9 +67,6 @@ Texture* Texture::LoadTexture(const std::wstring& texturePath)
 		UINT width;
 		UINT height;
 		pConverter->GetSize(&width, &height);
-
-		WICPixelFormatGUID format;
-		EngineUtil::ThrowIfFail(pConverter->GetPixelFormat(&format));
 
 		UINT bufferSz = width * height * 4;
 		GLubyte* buffer = new GLubyte[bufferSz];
@@ -152,4 +113,136 @@ Texture* Texture::MakeErrorTexture()
 	return new Texture(buffer, width, height, GL_BGR_EXT);
 }
 
+IWICImagingFactory* Texture::GetWICFactory()
+{
+	if (_pWICFactory == nullptr)
+	{
+		EngineUtil::ThrowIfFail(CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&_pWICFactory)));
+	}
+	return _pWICFactory;
+}
 
+CubeTexture::CubeTexture(const std::wstring& texturePath)
+{
+	IWICBitmapDecoder* pDecoder = NULL;
+	IWICBitmapFrameDecode* pFrame = NULL;
+	IWICFormatConverter* pConverter = NULL;
+
+	Texture** textures[] =
+	{
+		&this->Left,
+		&this->Front,
+		&this->Right,
+		&this->Back,
+		&this->Top,
+		&this->Bottom
+	};
+
+	try
+	{
+		IWICImagingFactory* pWICFactory = Texture::GetWICFactory();
+
+		EngineUtil::ThrowIfFail(pWICFactory->CreateDecoderFromFilename(
+			texturePath.c_str(),
+			NULL,
+			GENERIC_READ,
+			WICDecodeMetadataCacheOnDemand,
+			&pDecoder
+		));
+
+		EngineUtil::ThrowIfFail(pDecoder->GetFrame(0, &pFrame));
+
+		// Convert to BGRA format
+		pWICFactory->CreateFormatConverter(&pConverter);
+		EngineUtil::ThrowIfFail(pConverter->Initialize(
+			pFrame,							// Input bitmap source
+			GUID_WICPixelFormat32bppRGBA,	// Destination pixel format
+			WICBitmapDitherTypeNone,		// dither pattern
+			NULL,							// Specify a particular palette 
+			0.0f,							// Aplha threshold
+			WICBitmapPaletteTypeCustom		// Palette translation type
+		));
+
+		UINT width;
+		UINT height;
+		pConverter->GetSize(&width, &height);
+		if (width % 6 != 0)
+		{
+			goto end;
+		}
+
+		UINT widthPerFace = width / 6;
+
+		for (int i = 0; i < 6; i++)
+		{
+			UINT bufferSz = widthPerFace * height * 4;
+			GLubyte* buffer = new GLubyte[bufferSz];
+
+			WICRect rect =
+			{
+				widthPerFace * i, //x
+				0,
+				widthPerFace,
+				height
+			};
+
+			pConverter->CopyPixels(
+				&rect, // rect to copy. NULL specifies the entire bitmap
+				widthPerFace * 4,
+				bufferSz,
+				buffer
+			);
+			*textures[i] = new Texture(buffer, widthPerFace, height, GL_RGBA);
+		}
+	}
+	catch (_com_error err)
+	{
+		std::wcout << L"Failed to load texture file: " << texturePath << std::endl;
+	}
+
+end:
+	EngineUtil::SafeRelease(pConverter);
+	EngineUtil::SafeRelease(pFrame);
+	EngineUtil::SafeRelease(pDecoder);
+
+	Texture* errorTexture = NULL;
+	for (int i = 0; i < 6; i++)
+	{
+		if (*textures[i] == NULL)
+		{
+			if (errorTexture == NULL)
+			{
+				errorTexture = Texture::MakeErrorTexture();
+			}
+			*textures[i] = errorTexture;
+		}
+	}
+}
+
+CubeTexture::~CubeTexture()
+{
+	if (this->Front)
+	{
+		delete this->Front;
+	}
+	if (this->Back)
+	{
+		delete this->Back;
+	}
+	if (this->Left)
+	{
+		delete this->Left;
+	}
+	if (this->Right)
+	{
+		delete this->Right;
+	}
+	if (this->Top)
+	{
+		delete this->Top;
+	}
+	if (this->Bottom)
+	{
+		delete this->Bottom;
+	}
+}

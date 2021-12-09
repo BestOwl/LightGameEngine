@@ -22,7 +22,7 @@ namespace LightGameEngine
 		virtual Vector3 GetPos();
 
 		virtual void SetPos(Vector3 pos);
-
+		
 		/// <summary>
 		/// Current rotation degree
 		/// </summary>

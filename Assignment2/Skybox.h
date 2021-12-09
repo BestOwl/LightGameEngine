@@ -5,24 +5,15 @@
  */
 #pragma once
 #include "GameObject.h"
-#include "Texture.h"
+#include "Cube.h"
 
 using namespace LightGameEngine;
+using namespace LightGameEngine::GeometricPrimitives;
 
 class Skybox :
-    public GameObject
+    public Cube
 {
 public:
     Skybox(Vector3 initPos);
-    ~Skybox();
-    virtual void Draw() override;
-
-private:
-    Texture* front;
-    Texture* back;
-    Texture* left;
-    Texture* right;
-    Texture* top;
-    Texture* bottom;
 };
 
