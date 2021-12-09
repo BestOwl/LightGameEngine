@@ -20,7 +20,7 @@ namespace LightGameEngine
 		unsigned char b;
 	} Color;
 
-	typedef struct DrawCircleArgs
+	typedef struct DrawCircle2DArgs
 	{
 		GLfloat startAngle;
 		GLfloat endAngle;
@@ -37,8 +37,8 @@ namespace LightGameEngine
 		static void SelectFont(int size, const char* face);
 		static void DrawString(std::wstring str);
 
-		static DrawCircleArgs GetDefaultDrawCircleArgs();
-		static void DrawCircle(GLfloat cx, GLfloat cy, GLfloat r, DrawCircleArgs* extraArgs);
+		static DrawCircle2DArgs GetDefaultDrawCircleArgs();
+		static void DrawCircle2D(GLfloat cx, GLfloat cy, GLfloat r, DrawCircle2DArgs* extraArgs);
 
 		static void DrawRasterString(GLfloat x, GLfloat y, const char* str);
 		static void RasterStringSelectFont(int size, int charset, const char* face);

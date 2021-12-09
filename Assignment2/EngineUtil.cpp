@@ -115,11 +115,11 @@ void EngineUtil::DrawString(std::wstring str)
 	}
 }
 
-void EngineUtil::DrawCircle(GLfloat cx, GLfloat cy, GLfloat r, DrawCircleArgs* extraArgs)
+void EngineUtil::DrawCircle2D(GLfloat cx, GLfloat cy, GLfloat r, DrawCircle2DArgs* extraArgs)
 {
 	GLfloat x, y, angle;
 
-	DrawCircleArgs arg;
+	DrawCircle2DArgs arg;
 	if (extraArgs == NULL)
 	{
 		arg = GetDefaultDrawCircleArgs();
@@ -162,9 +162,9 @@ void EngineUtil::DrawRasterString(GLfloat x, GLfloat y, const char* str)
 	glDeleteLists(lists, MAX_CHAR);
 }
 
-DrawCircleArgs EngineUtil::GetDefaultDrawCircleArgs()
+DrawCircle2DArgs EngineUtil::GetDefaultDrawCircleArgs()
 {
-	return DrawCircleArgs {0, 2 * M_PI, 1, 1, GL_POLYGON};
+	return DrawCircle2DArgs {0, 2 * M_PI, 1, 1, GL_POLYGON};
 }
 
 void EngineUtil::ThrowIfFail(HRESULT hr)
