@@ -73,10 +73,8 @@ namespace LightGameEngine
 		/// <summary>
 		/// Initialize a GameObject object
 		/// </summary>
-		/// <param name="x">Init x pos</param>
-		/// <param name="y">Init y pos</param>
-		/// <param name="y">Init z pos</param>
-		GameObject(GLfloat x, GLfloat y, GLfloat z);
+		/// <param name="initPos">Init pos</param>
+		GameObject(Vector3 initPos);
 		~GameObject();
 
 	protected:

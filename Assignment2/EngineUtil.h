@@ -29,7 +29,6 @@ namespace LightGameEngine
 		GLenum drawMode;
 	};
 
-
 	class EngineUtil
 	{
 	public:
@@ -43,6 +42,18 @@ namespace LightGameEngine
 
 		static void DrawRasterString(GLfloat x, GLfloat y, const char* str);
 		static void RasterStringSelectFont(int size, int charset, const char* face);
+
+		static void ThrowIfFail(HRESULT hr);
+
+		template <typename T>
+		inline static void SafeRelease(T*& p)
+		{
+			if (NULL != p)
+			{
+				p->Release();
+				p = NULL;
+			}
+		}
 
 	};
 

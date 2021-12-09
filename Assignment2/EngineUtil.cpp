@@ -166,3 +166,11 @@ DrawCircleArgs EngineUtil::GetDefaultDrawCircleArgs()
 {
 	return DrawCircleArgs {0, 2 * M_PI, 1, 1, GL_POLYGON};
 }
+
+void EngineUtil::ThrowIfFail(HRESULT hr)
+{
+	if (FAILED(hr))
+	{
+		throw _com_error(hr);
+	}
+}

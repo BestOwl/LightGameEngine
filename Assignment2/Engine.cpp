@@ -7,6 +7,7 @@
 #include "Engine.h"
 #include "EngineUtil.h"
 #include "GameObject.h"
+#include "Skybox.h"
 
 #include <GL/freeglut.h>
 #include <iostream>
@@ -18,19 +19,26 @@ using namespace LightGameEngine;
 const int tick_interval = 16; // declare refresh interval in ms
 const GLint viewingWidth = 1600;
 const GLint viewingHeight = 900;
-const float cameraFOV = 90; //Field Of View
+const float cameraFOV = 70; //Field Of View
 
 static std::vector<GameObject*> sceneObjects;
 static Player* objPlayer;
 static KeyboardStatus keyboardStatus;
+static bool isPause;
 
-static GLfloat lastMouseX = 0;
-static GLfloat lastMouseY = 0;
+// fps
+static int frames;
+static GLfloat fps;
+static LARGE_INTEGER pfc_counter_last;
+static LARGE_INTEGER pfc_frequency;
+
+static Skybox* skybox;
 
 void RenderScene();
 void RenderGameObject(GameObject* obj);
 void OnTimer(int value);
 void MouseMovePassive(int x, int y);
+void OnMouseEntry(int entry);
 void KeyboardDown(unsigned char key, int x, int y);
 void KeyboardUp(unsigned char key, int x, int y);
 
@@ -39,7 +47,13 @@ void Engine::Init(int argc, char** argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(viewingWidth, viewingHeight);
+
+	// Init COM 
+	EngineUtil::ThrowIfFail(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED));
+	QueryPerformanceFrequency(&pfc_frequency);
+
 	sceneObjects = std::vector<GameObject*>();
+	skybox = new Skybox(Vector3{ 0, 0, 0 });
 }
 
 void Engine::Run()
@@ -52,14 +66,17 @@ void Engine::Run()
 	//OnAnimationTimer(0);
 
 	glutDisplayFunc(RenderScene);
+
 	glutPassiveMotionFunc(MouseMovePassive);
+	glutEntryFunc(OnMouseEntry);
+	glutSetCursor(GLUT_CURSOR_NONE);
+
 	glutKeyboardFunc(KeyboardDown);
 	glutKeyboardUpFunc(KeyboardUp);
 	//glutReshapeFunc(Reshape);
 	//glutIdleFunc(IdleDisplay);
 	glutTimerFunc(tick_interval, OnTimer, 1);
-
-	glutSetCursor(GLUT_CURSOR_NONE);
+	
 	glutWarpPointer(viewingWidth / 2.0, viewingHeight / 2.0);
 
 	glutMainLoop();
@@ -75,9 +92,19 @@ KeyboardStatus* LightGameEngine::Engine::GetKeyboardStatus()
 	return &keyboardStatus;
 }
 
-void LightGameEngine::Engine::SetPlayer(Player* obj)
+void Engine::SetPlayer(Player* obj)
 {
 	objPlayer = obj;
+}
+
+void Engine::SetPauseState(bool pause)
+{
+	isPause = pause;
+}
+
+bool LightGameEngine::Engine::GetPauseState()
+{
+	return isPause;
 }
 
 void RenderScene()
@@ -93,14 +120,15 @@ void RenderScene()
 	glLoadIdentity();
 	gluPerspective(cameraFOV, (GLdouble) viewingWidth / (GLdouble) viewingHeight, 0.1, 5000);
 	Vector3 cameraPos = objPlayer->GetCameraPos();
-	Vector3 refPos = objPlayer->GetLookAtRef();
+	Vector3 lookAtVector = objPlayer->GetLookAtVector();
+	Vector3 upVector = objPlayer->GetUpVector();
 	gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z,
-		refPos.x, refPos.y, refPos.z,
-		0, 1, 0);
+		cameraPos.x + lookAtVector.x, cameraPos.y + lookAtVector.y, cameraPos.z + lookAtVector.z,
+		upVector.x, upVector.y, upVector.z);
 
-	// x-axis
+#ifdef _DEBUG
 	glLineWidth(1);
-
+	// x-axis
 	glBegin(GL_LINES);
 	glColor3ub(255, 0, 0);
 	glVertex3f(0, 0, 0);
@@ -120,13 +148,19 @@ void RenderScene()
 	glVertex3f(0, 0, 0);
 	glVertex3f(0, 0, 500);
 	glEnd();
+#endif // _DEBUG
 
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glColor3ub(150, 150, 0);
-	glTranslatef(0, 0, 0);
-	glutSolidCube(50);
-	glPopMatrix();
+	// Lighting
+	glEnable(GL_LIGHTING);
+	GLfloat light_global_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_global_ambient);
+	glEnable(GL_COLOR_MATERIAL);
+
+	Vector3 l0_pos = { 0, 500, 0 };
+	glLightfv(GL_LIGHT0, GL_POSITION, (GLfloat*)&l0_pos);
+	GLfloat l0_ambient[] = { 0.8, 0.8, 0.8 };
+	glLightfv(GL_LIGHT0, GL_AMBIENT, l0_ambient);
+	glEnable(GL_LIGHT0);
 
 	// draw foreground object
 	for (GameObject* obj : sceneObjects)
@@ -135,16 +169,36 @@ void RenderScene()
 	}
 
 	RenderGameObject(objPlayer);
+	skybox->SetPos(objPlayer->GetPos());
+	RenderGameObject(skybox);
 
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 
-#pragma region 2D UI overlay
+#ifndef LG_ENGINE_OVERLAY
+#define LG_ENGINE_OVERLAY
+#endif // !LG_ENGINE_OVERLAY
+
+#ifdef LG_ENGINE_OVERLAY
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 
 	glLoadIdentity();
 	gluOrtho2D(0, viewingWidth, viewingHeight, 0);
+
+	glDisable(GL_LIGHTING);
+
+	frames++;
+	LARGE_INTEGER pfc_counter;
+	QueryPerformanceCounter(&pfc_counter);
+
+	if ((pfc_counter.QuadPart - pfc_counter_last.QuadPart) / pfc_frequency.QuadPart >= 1)
+	{
+		fps = frames;
+		frames = 0;
+		pfc_counter_last = pfc_counter;
+	}
+
 
 #ifdef _DEBUG
 	EngineUtil::RasterStringSelectFont(20, ANSI_CHARSET, "Cascadia Code");
@@ -152,29 +206,39 @@ void RenderScene()
 	EngineUtil::DrawRasterString(4, 20, "Debug Mode");
 
 	std::stringstream ss = std::stringstream();
-	Vector3 pos = objPlayer->GetPos();
-	ss << "Player Pos: " << std::fixed << std::setprecision(3) << "x: " << pos.x << "  y: " << pos.y << "  z: " << pos.z;
-	EngineUtil::DrawRasterString(4, 40, ss.str().c_str());
+	ss << "FPS: " << fps;
+	EngineUtil::DrawRasterString(104, 20, ss.str().c_str());
 
-	ss = std::stringstream();
-	pos = objPlayer->GetCameraPos();
-	ss << "Camera Pos: " << std::fixed << std::setprecision(3) << "x: " << pos.x << "  y: " << pos.y << "  z: " << pos.z;
-	EngineUtil::DrawRasterString(4, 60, ss.str().c_str());
+	//ss = std::stringstream();
+	//Vector3 pos = objPlayer->GetPos();
+	//ss << "Player Pos: " << std::fixed << std::setprecision(3) << "x: " << pos.x << "  y: " << pos.y << "  z: " << pos.z;
+	//EngineUtil::DrawRasterString(4, 40, ss.str().c_str());
 
-	ss = std::stringstream();
-	pos = objPlayer->GetLookAtRef();
-	ss << "LookAt Pos: " << std::fixed << std::setprecision(3) << "x: " << pos.x << "  y: " << pos.y << "  z: " << pos.z;
-	EngineUtil::DrawRasterString(4, 80, ss.str().c_str());
+	//ss = std::stringstream();
+	//ss << "Camera Pos: " << std::fixed << std::setprecision(3) << "x: " << cameraPos.x << "  y: " << cameraPos.y << "  z: " << cameraPos.z;
+	//EngineUtil::DrawRasterString(4, 60, ss.str().c_str());
 
-	ss = std::stringstream();
-	ss << std::fixed << std::setprecision(3) << "Yaw: " << objPlayer->GetYaw() << "  Pitch: " << objPlayer->GetPitch();
-	EngineUtil::DrawRasterString(4, 100, ss.str().c_str());
+	//ss = std::stringstream();
+	//ss << "LookAt Vector: " << std::fixed << std::setprecision(3) << "x: " << lookAtVector.x << "  y: " << lookAtVector.y << "  z: " << lookAtVector.z;
+	//EngineUtil::DrawRasterString(4, 80, ss.str().c_str());
+
+	//ss = std::stringstream();
+	//ss << "UpVector Pos: " << std::fixed << std::setprecision(3) << "x: " << upVector.x << "  y: " << upVector.y << "  z: " << upVector.z;
+	//EngineUtil::DrawRasterString(4, 100, ss.str().c_str());
+
+	//ss = std::stringstream();
+	//ss << std::fixed << std::setprecision(3) << "Yaw: " << objPlayer->GetYaw() << "  Pitch: " << objPlayer->GetPitch();
+	//EngineUtil::DrawRasterString(4, 120, ss.str().c_str());
+
+	//ss = std::stringstream();
+	//ss << std::fixed << std::setprecision(3) << "UpVector Yaw: " << objPlayer->GetUpVectorYaw() << "  UpVector Pitch: " << objPlayer->GetUpVectorPitch();
+	//EngineUtil::DrawRasterString(4, 140, ss.str().c_str());
 
 #endif
 
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
-#pragma endregion
+#endif // LG_ENGINE_OVERLAY
 
 	glFlush();
 }
@@ -232,39 +296,42 @@ bool TickObject(GameObject* obj)
 
 void OnTimer(int value)
 {
-	glutWarpPointer(viewingWidth / 2, viewingHeight / 2);
-	bool dirty = false;
-
-	auto i_obj = std::begin(sceneObjects);
-	while (i_obj != end(sceneObjects))
+	if (!Engine::GetPauseState())
 	{
-		if ((*i_obj)->IsDestroyed)
+		glutWarpPointer(viewingWidth / 2, viewingHeight / 2);
+		bool dirty = false;
+
+		auto i_obj = std::begin(sceneObjects);
+		while (i_obj != end(sceneObjects))
 		{
-			GameObject* p_oldObj = *i_obj;
-			i_obj = sceneObjects.erase(i_obj);
-			delete p_oldObj;
-		}
-		else
-		{
-			if (TickObject(*i_obj))
+			if ((*i_obj)->IsDestroyed)
 			{
-				dirty = true;
+				GameObject* p_oldObj = *i_obj;
+				i_obj = sceneObjects.erase(i_obj);
+				delete p_oldObj;
 			}
+			else
+			{
+				if (TickObject(*i_obj))
+				{
+					dirty = true;
+				}
 
-			++i_obj;
+				++i_obj;
+			}
+		}
+
+		if (TickObject(objPlayer))
+		{
+			dirty = true;
+		}
+
+		if (dirty)
+		{
+			glutPostRedisplay();
 		}
 	}
-
-	if (TickObject(objPlayer))
-	{
-		dirty = true;
-	}
-
-	if (dirty)
-	{
-		glutPostRedisplay();
-	}
-
+	
 	glutTimerFunc(tick_interval, OnTimer, 1);
 }
 
@@ -276,9 +343,22 @@ void MouseMovePassive(int x, int y)
 	objPlayer->AddYaw(xDev / 20.0);
 	objPlayer->AddPitch(-yDev / 20.0);
 
-	if (abs(xDev) > 0 || abs(yDev) > 0)
+	if (xDev != 0 || yDev != 0)
 	{
 		glutPostRedisplay();
+	}
+}
+
+void OnMouseEntry(int entry)
+{
+	if (entry == GLUT_LEFT)
+	{
+		Engine::SetPauseState(true);
+	}
+	else if (entry == GLUT_ENTERED)
+	{
+		glutWarpPointer(viewingWidth / 2, viewingHeight / 2);
+		Engine::SetPauseState(false);
 	}
 }
 

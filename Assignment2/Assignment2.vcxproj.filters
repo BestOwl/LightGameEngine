@@ -36,6 +36,15 @@
     <ClCompile Include="EngineBasis.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="CubeDemo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -56,5 +65,37 @@
     <ClInclude Include="EngineBasis.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CubeDemo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="cube_demo.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="skybox_back.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="skybox_bottom.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="skybox_front.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="skybox_left.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="skybox_right.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="skybox_top.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

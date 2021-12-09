@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -139,21 +139,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CubeDemo.cpp" />
     <ClCompile Include="EngineBasis.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EngineUtil.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Teapot.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CubeDemo.h" />
     <ClInclude Include="EngineBasis.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineUtil.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="Teapot.h" />
+    <ClInclude Include="Texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="cube_demo.bmp" />
+    <Image Include="skybox_back.bmp" />
+    <Image Include="skybox_bottom.bmp" />
+    <Image Include="skybox_front.bmp" />
+    <Image Include="skybox_left.bmp" />
+    <Image Include="skybox_right.bmp" />
+    <Image Include="skybox_top.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

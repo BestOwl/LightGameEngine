@@ -78,9 +78,9 @@ bool GameObject::Tick()
 	return false;
 }
 
-GameObject::GameObject(GLfloat x, GLfloat y, GLfloat z)
+GameObject::GameObject(Vector3 initPos)
 {
-	this->pos = { x, y, z };
+	this->pos = initPos;
 	this->ChildrenObjects = std::vector<GameObject*>();
 }
 

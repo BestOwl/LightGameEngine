@@ -24,6 +24,9 @@ namespace LightGameEngine
 		static KeyboardStatus* GetKeyboardStatus();
 		static void SetPlayer(Player* obj);
 
+		static void SetPauseState(bool pause);
+		static bool GetPauseState();
+
 	};
 	
 }

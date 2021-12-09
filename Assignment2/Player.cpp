@@ -10,13 +10,15 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-void LightGameEngine::Player::Draw()
+using namespace LightGameEngine;
+
+void Player::Draw()
 {
 	glColor3ub(0, 255, 0);
 	glutSolidCube(1);
 }
 
-bool LightGameEngine::Player::Tick()
+bool Player::Tick()
 {
 	bool dirty = false;
 	KeyboardStatus* key = Engine::GetKeyboardStatus();
@@ -58,7 +60,7 @@ bool LightGameEngine::Player::Tick()
 	return dirty;
 }
 
-void LightGameEngine::Player::SetPos(Vector3 pos)
+void Player::SetPos(Vector3 pos)
 {
 	if (this->hasMovementLimit)
 	{
@@ -74,41 +76,29 @@ void LightGameEngine::Player::SetPos(Vector3 pos)
 	GameObject::SetPos(pos);
 }
 
-LightGameEngine::Vector3 LightGameEngine::Player::GetCameraPos()
+Vector3 Player::GetCameraPos()
 {
 	Vector3 cameraPos = this->pos;
 	cameraPos.y += 10;
 	return cameraPos;
 }
 
-LightGameEngine::Vector3 LightGameEngine::Player::GetLookAtRef()
+Vector3 Player::GetLookAtVector()
 {
-	Vector3 ref = this->GetCameraPos();
-	float yawAngle = this->yaw * M_PI / 180.0;
-	ref.x += 1 * cos(yawAngle);
-	ref.z += 1 * sin(yawAngle);
-	
-	ref.y += 1 * sin(this->pitch * M_PI / 180.0);
-
-	//std::cout << "yaw: " << this->yaw << std::endl;
-
-	return ref;
+	return this->getRelativeVecFromYawAndPitch(this->yaw, this->pitch);
 }
 
-void LightGameEngine::Player::AddYaw(GLfloat degree)
+Vector3 Player::GetUpVector()
 {
-	this->yaw += degree;
-	if (this->yaw > this->yawMax)
-	{
-		this->yaw = 0 + (this->yaw - this->yawMax);
-	}
-	else if (this->yaw < this->yawMin)
-	{
-		this->yaw = this->yawMax - (0 - this->yaw);
-	}
+	return this->getRelativeVecFromYawAndPitch(this->GetUpVectorYaw(), this->GetUpVectorPitch());
 }
 
-void LightGameEngine::Player::AddPitch(GLfloat degree)
+void Player::AddYaw(GLfloat degree)
+{
+	this->yaw = this->wrapYaw(this->yaw + degree);
+}
+
+void Player::AddPitch(GLfloat degree)
 {
 	this->pitch += degree;
 	if (this->pitch > this->pitchMax)
@@ -121,13 +111,48 @@ void LightGameEngine::Player::AddPitch(GLfloat degree)
 	}
 }
 
-GLfloat LightGameEngine::Player::GetYaw()
+GLfloat Player::GetYaw()
 {
 	return this->yaw;
 }
 
-GLfloat LightGameEngine::Player::GetPitch()
+GLfloat Player::GetPitch()
 {
 	return this->pitch;
+}
+
+GLfloat LightGameEngine::Player::GetUpVectorYaw()
+{
+	return this->wrapYaw(this->yaw + 180);
+}
+
+GLfloat LightGameEngine::Player::GetUpVectorPitch()
+{
+	return 90 - this->pitch;
+}
+
+Vector3 Player::getRelativeVecFromYawAndPitch(GLfloat yaw, GLfloat pitch)
+{
+	float yawInRadian = yaw * M_PI / 180.0;
+	float pitchInRadian = pitch * M_PI / 180.0;
+	return Vector3
+	{ 
+		1 * cos(pitchInRadian) * cos(yawInRadian),  //x
+		1 * sin(pitchInRadian),						//y
+		1 * cos(pitchInRadian) * sin(yawInRadian)   //z
+	};
+}
+
+GLfloat Player::wrapYaw(GLfloat yaw)
+{
+	if (yaw > this->yawMax)
+	{
+		yaw = 0 + (yaw - this->yawMax);
+	}
+	else if (yaw < this->yawMin)
+	{
+		yaw = this->yawMax - (0 - yaw);
+	}
+	return yaw;
 }
 

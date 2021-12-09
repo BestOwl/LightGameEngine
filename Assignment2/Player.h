@@ -20,16 +20,23 @@ namespace LightGameEngine
 
 		Vector3 GetCameraPos();
 		/// <summary>
-		/// Get the reference point used in glLookAt 
+		/// Get the reference point vector (camera pos as origin) used in glLookAt.
 		/// </summary>
-		/// <returns></returns>
-		Vector3 GetLookAtRef();
+		Vector3 GetLookAtVector();
+
+		/// <summary>
+		/// Get the up vector (camera pos as origin) used in glLookAt.
+		/// </summary>
+		Vector3 GetUpVector();
 
 		void AddYaw(GLfloat degree);
 		void AddPitch(GLfloat degree);
 
 		GLfloat GetYaw();
 		GLfloat GetPitch();
+
+		GLfloat GetUpVectorYaw();
+		GLfloat GetUpVectorPitch();
 
 	protected:
 		bool hasMovementLimit = false;
@@ -47,6 +54,15 @@ namespace LightGameEngine
 		GLfloat pitch;
 		GLfloat pitchMin = -90;
 		GLfloat pitchMax = 90;
+
+		Vector3 getRelativeVecFromYawAndPitch(GLfloat yaw, GLfloat pitch);
+
+		/// <summary>
+		/// Warp yaw to valid range
+		/// </summary>
+		/// <param name="yaw"></param>
+		/// <returns></returns>
+		GLfloat wrapYaw(GLfloat yaw);
 	};
 }
 
