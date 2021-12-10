@@ -18,7 +18,7 @@ namespace LightGameEngine::GeometricPrimitives
         public GameObject
     {
     public:
-        Cylinder(Vector3 initPos, GLfloat radius, GLfloat height, Vector3 axisVector, const std::wstring& texturePath);
+        Cylinder(Vector3 initPos, GLfloat radius, GLfloat height, Vector3 axisVector);
         ~Cylinder();
         virtual void Draw() override;
 
@@ -28,7 +28,6 @@ namespace LightGameEngine::GeometricPrimitives
         Vector3 axisVector;
 
     private:
-        Texture* texture;
         Vector3 offset;
     };
 }

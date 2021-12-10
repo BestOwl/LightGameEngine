@@ -32,7 +32,7 @@ void OnKeyEvent(unsigned char key, int x, int y);
 
 std::vector<GameObject*> sceneObjects = std::vector<GameObject*>();
 bool zoom = false;
-PlayerLiverBird objPlayer = PlayerLiverBird(0, 0);
+PlayerLiverBird _player = PlayerLiverBird(0, 0);
 
 const GLint viewingWidth = 800;
 const GLint viewingHeight = 600;
@@ -122,7 +122,7 @@ void RenderScene()
 
 	if (zoom)
 	{
-		glViewport(std::max(-(objPlayer.GetX() + 400), -800.0f), -(objPlayer.GetY() + 300), viewingWidth * 2, viewingHeight * 2);
+		glViewport(std::max(-(_player.GetX() + 400), -800.0f), -(_player.GetY() + 300), viewingWidth * 2, viewingHeight * 2);
 	}
 	else 
 	{
@@ -193,7 +193,7 @@ void RenderScene()
 	NaiveEngineUtil::RasterStringSelectFont(48, ANSI_CHARSET, "Comic Sans MS");
 	NaiveEngineUtil::DrawRasterString(0, 250, "XJTLU 15th Anniversary");
 
-	RenderGameObject(&objPlayer);
+	RenderGameObject(&_player);
 
 	glFlush();
 }
@@ -258,7 +258,7 @@ void OnTimer(int value)
 		}
 	}
 
-	TickObject(&objPlayer);
+	TickObject(&_player);
 
 	if (dirty)
 	{
@@ -301,8 +301,8 @@ void OnAnimationTimer(int value)
 static int player_movement_step = 10;
 void MovePlayerLeft()
 {
-	objPlayer.SetX(objPlayer.GetX() - player_movement_step);
-	GLint offset = objPlayer.GetX() - (orthoL + viewingOffsetX);
+	_player.SetX(_player.GetX() - player_movement_step);
+	GLint offset = _player.GetX() - (orthoL + viewingOffsetX);
 	if (offset < 100)
 	{
 		viewingOffsetX -= player_movement_step;
@@ -315,8 +315,8 @@ void MovePlayerLeft()
 
 void MovePlayerRight()
 {
-	objPlayer.SetX(objPlayer.GetX() + player_movement_step);
-	GLint offset = orthoR + viewingOffsetX - objPlayer.GetX();
+	_player.SetX(_player.GetX() + player_movement_step);
+	GLint offset = orthoR + viewingOffsetX - _player.GetX();
 	if (offset < 100)
 	{
 		viewingOffsetX += player_movement_step;
@@ -371,7 +371,7 @@ void OnKeyEvent(unsigned char key, int x, int y)
 	switch (key)
 	{
 	case ' ':
-		objPlayer.VelocityY += 5;
+		_player.VelocityY += 5;
 		break;
 	case 'z':
 		zoom = !zoom;

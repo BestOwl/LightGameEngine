@@ -2,9 +2,9 @@
 
 using namespace LightGameEngine::GeometricPrimitives;
 
-Cube::Cube(Vector3 initPos, GLfloat sideLength, const std::wstring& texturePath) : GameObject(initPos)
+Cube::Cube(Vector3 initPos, GLfloat sideLength, CubeTexture* texture) : GameObject(initPos)
 {
-	this->texture = new CubeTexture(texturePath);
+	this->texture = texture;
 	this->sideLength = sideLength;
 	this->offset = sideLength / 2.f;
 }

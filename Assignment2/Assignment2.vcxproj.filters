@@ -27,9 +27,6 @@
     <ClCompile Include="Teapot.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Skybox.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Humanoid.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -58,14 +55,14 @@
       <Filter>GeometricPrimitives</Filter>
     </ClCompile>
     <ClCompile Include="Sphere.cpp">
+      <Filter>GeometricPrimitives</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureStore.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Teapot.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Skybox.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Humanoid.h">
@@ -96,6 +93,9 @@
       <Filter>GeometricPrimitives</Filter>
     </ClInclude>
     <ClInclude Include="Sphere.h">
+      <Filter>GeometricPrimitives</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureStore.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

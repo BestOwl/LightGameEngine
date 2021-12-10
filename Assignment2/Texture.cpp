@@ -16,20 +16,28 @@ IWICImagingFactory* Texture::_pWICFactory = nullptr;
 
 Texture::Texture(GLubyte* buffer, GLuint width, GLuint height, GLenum format)
 {
-	this->Buffer = buffer;
-	this->Width = width;
-	this->Height = height;
-	this->Format = format;
+	glGenTextures(1, &this->Name);
+	glBindTexture(GL_TEXTURE_2D, this->Name);
+	gluBuild2DMipmaps(GL_TEXTURE_2D, 4, width, height, format, GL_UNSIGNED_BYTE, buffer);
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
 Texture::~Texture()
 {
-	delete this->Buffer;
+	if (this->Name)
+	{
+		glDeleteTextures(1, &this->Name);
+	}
 }
 
 void Texture::BindTexture()
 {
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, this->Width, this->Height, 0, this->Format, GL_UNSIGNED_BYTE, this->Buffer);
+	glBindTexture(GL_TEXTURE_2D, this->Name);
 }
 
 Texture* Texture::LoadTexture(const std::wstring& texturePath)
@@ -79,6 +87,7 @@ Texture* Texture::LoadTexture(const std::wstring& texturePath)
 		);
 
 		pTexture = new Texture(buffer, width, height, GL_RGBA);
+		delete[] buffer;
 	}
 	catch (_com_error err)
 	{
@@ -99,7 +108,7 @@ Texture* Texture::MakeErrorTexture()
 {
 	GLuint width = 64;
 	GLuint height = 64;
-	GLubyte* buffer = new GLubyte[width * height * 3];
+	GLubyte* buffer = new GLubyte[width * height * 4];
 
 	int i, j, c;
 	for (i = 0; i < width; i++) {
@@ -108,9 +117,10 @@ Texture* Texture::MakeErrorTexture()
 			buffer[i + j * height + 0] = (GLubyte)c; // which are faster than normal calculations
 			buffer[i + j * height + 1] = (GLubyte)c;
 			buffer[i + j * height + 2] = (GLubyte)c;
+			buffer[i + j * height + 3] = 1;
 		}
 	}
-	return new Texture(buffer, width, height, GL_BGR_EXT);
+	return new Texture(buffer, width, height, GL_RGBA);
 }
 
 IWICImagingFactory* Texture::GetWICFactory()

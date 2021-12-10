@@ -15,7 +15,7 @@ namespace LightGameEngine::GeometricPrimitives
 		public GameObject
 	{
 	public:
-		Cube(Vector3 initPos, GLfloat sideLength, const std::wstring& texturePath);
+		Cube(Vector3 initPos, GLfloat sideLength, CubeTexture* texture);
 		~Cube();
 
 		virtual void Draw() override;

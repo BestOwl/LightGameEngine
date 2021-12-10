@@ -12,7 +12,7 @@
 using namespace LightGameEngine;
 using namespace LightGameEngine::GeometricPrimitives;
 
-Cylinder::Cylinder(Vector3 initPos, GLfloat radius, GLfloat height, Vector3 axisVector, const std::wstring& texturePath) : GameObject(initPos)
+Cylinder::Cylinder(Vector3 initPos, GLfloat radius, GLfloat height, Vector3 axisVector) : GameObject(initPos)
 {
 	this->radius = radius;
 	this->height = height;
@@ -20,13 +20,10 @@ Cylinder::Cylinder(Vector3 initPos, GLfloat radius, GLfloat height, Vector3 axis
 
 	GLfloat norm = height / 2;
 	this->offset = axisVector.Scale(norm);
-
-	texture = Texture::LoadTexture(L"cube_demo.png");
 }
 
 Cylinder::~Cylinder()
 {
-	delete this->texture;
 }
 
 void Cylinder::Draw()

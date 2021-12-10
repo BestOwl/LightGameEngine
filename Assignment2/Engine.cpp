@@ -6,8 +6,6 @@
 
 #include "Engine.h"
 #include "EngineUtil.h"
-#include "GameObject.h"
-#include "Skybox.h"
 
 #include <GL/freeglut.h>
 #include <iostream>
@@ -22,7 +20,8 @@ const GLint viewingHeight = 900;
 const float cameraFOV = 70; //Field Of View
 
 static std::vector<GameObject*> sceneObjects;
-static Player* objPlayer;
+static Player* _player;
+static Cube* _skybox;
 static KeyboardStatus keyboardStatus;
 static bool isPause;
 
@@ -32,7 +31,6 @@ static GLfloat fps;
 static LARGE_INTEGER pfc_counter_last;
 static LARGE_INTEGER pfc_frequency;
 
-static Skybox* skybox;
 
 void RenderScene();
 void RenderGameObject(GameObject* obj);
@@ -52,12 +50,6 @@ void Engine::Init(int argc, char** argv)
 	EngineUtil::ThrowIfFail(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED));
 	QueryPerformanceFrequency(&pfc_frequency);
 
-	sceneObjects = std::vector<GameObject*>();
-	skybox = new Skybox(Vector3{ 0, 0, 0 });
-}
-
-void Engine::Run()
-{
 	glutCreateWindow("Assignment 2");
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -76,6 +68,13 @@ void Engine::Run()
 	//glutReshapeFunc(Reshape);
 	//glutIdleFunc(IdleDisplay);
 	glutTimerFunc(tick_interval, OnTimer, 1);
+
+	sceneObjects = std::vector<GameObject*>();
+}
+
+void Engine::Run()
+{
+	
 	
 	glutWarpPointer(viewingWidth / 2.0, viewingHeight / 2.0);
 
@@ -94,7 +93,12 @@ KeyboardStatus* LightGameEngine::Engine::GetKeyboardStatus()
 
 void Engine::SetPlayer(Player* obj)
 {
-	objPlayer = obj;
+	_player = obj;
+}
+
+void Engine::SetSkybox(Cube* skybox)
+{
+	_skybox = skybox;
 }
 
 void Engine::SetPauseState(bool pause)
@@ -119,9 +123,9 @@ void RenderScene()
 
 	glLoadIdentity();
 	gluPerspective(cameraFOV, (GLdouble) viewingWidth / (GLdouble) viewingHeight, 0.1, 5000);
-	Vector3 cameraPos = objPlayer->GetCameraPos();
-	Vector3 lookAtVector = objPlayer->GetLookAtVector();
-	Vector3 upVector = objPlayer->GetUpVector();
+	Vector3 cameraPos = _player->GetCameraPos();
+	Vector3 lookAtVector = _player->GetLookAtVector();
+	Vector3 upVector = _player->GetUpVector();
 	gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z,
 		cameraPos.x + lookAtVector.x, cameraPos.y + lookAtVector.y, cameraPos.z + lookAtVector.z,
 		upVector.x, upVector.y, upVector.z);
@@ -154,7 +158,7 @@ void RenderScene()
 	glEnable(GL_LIGHTING);
 	GLfloat light_global_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_global_ambient);
-	glEnable(GL_COLOR_MATERIAL);
+	//glEnable(GL_COLOR_MATERIAL);
 
 	Vector3 l0_pos = { 0, 500, 0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, (GLfloat*)&l0_pos);
@@ -168,9 +172,9 @@ void RenderScene()
 		RenderGameObject(obj);
 	}
 
-	RenderGameObject(objPlayer);
-	skybox->SetPos(objPlayer->GetPos());
-	RenderGameObject(skybox);
+	RenderGameObject(_player);
+	_skybox->SetPos(_player->GetPos());
+	RenderGameObject(_skybox);
 
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
@@ -321,7 +325,7 @@ void OnTimer(int value)
 			}
 		}
 
-		if (TickObject(objPlayer))
+		if (TickObject(_player))
 		{
 			dirty = true;
 		}
@@ -340,8 +344,8 @@ void MouseMovePassive(int x, int y)
 	int xDev = x - (viewingWidth / 2);
 	int yDev = y - (viewingHeight / 2);
 
-	objPlayer->AddYaw(xDev / 20.0);
-	objPlayer->AddPitch(-yDev / 20.0);
+	_player->AddYaw(xDev / 20.0);
+	_player->AddPitch(-yDev / 20.0);
 
 	if (xDev != 0 || yDev != 0)
 	{

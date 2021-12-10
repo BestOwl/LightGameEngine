@@ -149,10 +149,10 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EngineUtil.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Teapot.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureStore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h" />
@@ -163,10 +163,10 @@
     <ClInclude Include="EngineUtil.h" />
     <ClInclude Include="Humanoid.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Teapot.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureStore.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="cube_demo.bmp" />

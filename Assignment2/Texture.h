@@ -20,10 +20,7 @@ namespace LightGameEngine
 
 		void BindTexture();
 
-		GLubyte* Buffer;
-		GLuint Width;
-		GLuint Height;
-		GLenum Format;
+		GLuint Name;
 
 		static Texture* LoadTexture(const std::wstring& texturePath);
 		static Texture* MakeErrorTexture();
@@ -40,11 +37,11 @@ namespace LightGameEngine
 		CubeTexture(const std::wstring& texturePath);
 		~CubeTexture();
 
-		Texture* Front;
-		Texture* Back;
-		Texture* Left;
-		Texture* Right;
-		Texture* Top;
-		Texture* Bottom;
+		Texture* Front = nullptr;
+		Texture* Back = nullptr;
+		Texture* Left = nullptr;
+		Texture* Right = nullptr;
+		Texture* Top = nullptr;
+		Texture* Bottom = nullptr;
 	};
 }
