@@ -139,6 +139,36 @@ void EngineUtil::DrawCircle2D(GLfloat cx, GLfloat cy, GLfloat r, DrawCircle2DArg
 	glEnd();
 }
 
+std::vector<Vector3> EngineUtil::GenCircleVertices3D(Vector3 center, GLfloat r, Vector3 normalVector, std::vector<Vector2>* out_TexCoord)
+{
+	std::vector<Vector3> vertices;
+
+	// Calculate the axis vectors (three vectors are perpendicular to each other)
+	Vector3 a = normalVector.CrossProduct(Vector3{ 0, 0, 1 });
+	a.ScaleTo(1); // to unit vector
+	Vector3 b = normalVector.CrossProduct(Vector3{ 1, 0, 0 });
+	b.ScaleTo(1);
+
+	for (GLfloat angle = 0; angle <= 2 * M_PI; angle += 0.01f)
+	{
+		GLfloat plane_a = cos(angle);
+		GLfloat plane_b = sin(angle);
+
+		if (out_TexCoord != NULL)
+		{
+			out_TexCoord->push_back(Vector2{ plane_a / 2.f + 0.5f, 0.5f - plane_b / 2.f });
+		}
+
+		Vector3 v1 = r * plane_a * a;
+		Vector3 v2 = r * plane_b * b;
+
+		Vector3 cp = center + v1 + v2;
+		vertices.push_back(cp);
+	}
+
+	return vertices;
+}
+
 void EngineUtil::RasterStringSelectFont(int size, int charset, const char* face) {
 	HFONT hFont = CreateFontA(size, 0, 0, 0, FW_MEDIUM, 0, 0, 0, charset, OUT_DEFAULT_PRECIS,
 		CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, face);

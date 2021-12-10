@@ -54,6 +54,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>LightGameEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Cylinder.cpp">
+      <Filter>GeometricPrimitives</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Teapot.h">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>LightGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Cylinder.h">
+      <Filter>GeometricPrimitives</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

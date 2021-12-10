@@ -5,11 +5,14 @@
  */
 #pragma once
 
+#include "EngineBasis.h"
+
 #include <GL/freeglut.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <type_traits>
 #include <string>
+#include <vector>
 
 namespace LightGameEngine
 {
@@ -39,6 +42,8 @@ namespace LightGameEngine
 
 		static DrawCircle2DArgs GetDefaultDrawCircleArgs();
 		static void DrawCircle2D(GLfloat cx, GLfloat cy, GLfloat r, DrawCircle2DArgs* extraArgs);
+
+		static std::vector<Vector3> GenCircleVertices3D(Vector3 center, GLfloat r, Vector3 normalVector, std::vector<Vector2>* out_TexCoord = NULL);
 
 		static void DrawRasterString(GLfloat x, GLfloat y, const char* str);
 		static void RasterStringSelectFont(int size, int charset, const char* face);

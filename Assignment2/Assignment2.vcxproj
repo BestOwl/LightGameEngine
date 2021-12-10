@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="EngineBasis.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Humanoid.cpp" />
@@ -154,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Cylinder.h" />
     <ClInclude Include="EngineBasis.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Engine.h" />

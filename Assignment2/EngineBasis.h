@@ -17,12 +17,31 @@ namespace LightGameEngine
 		bool Right;
 	} KeyboardStatus;
 
-	typedef struct {
+	struct Vector2_struct
+	{
+		GLfloat x;
+		GLfloat y;
+	};
+	typedef Vector2_struct Vector2;
+
+	struct Vector3_struct  
+	{
 		GLfloat x;
 		GLfloat y;
 		GLfloat z;
-	} Vector3;
+	public:
+		GLfloat GetNorm();
+		void ScaleTo(GLfloat norm);
+		Vector3_struct Scale(GLfloat norm);
+		Vector3_struct CrossProduct(Vector3_struct vec3R);
+	};
+	typedef Vector3_struct Vector3;
+	
 
 	Vector3 operator+(const Vector3& vec3L, const Vector3& vec3R);
 	Vector3& operator+=(Vector3& vec3L, const Vector3& vec3R);
+
+	Vector3 operator-(const Vector3& vec3L, const Vector3& vec3R);
+
+	Vector3 operator*(GLfloat scale, const Vector3& vec3);
 }
