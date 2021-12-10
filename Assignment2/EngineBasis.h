@@ -44,4 +44,10 @@ namespace LightGameEngine
 	Vector3 operator-(const Vector3& vec3L, const Vector3& vec3R);
 
 	Vector3 operator*(GLfloat scale, const Vector3& vec3);
+
+	class EngineBasis
+	{
+	public:
+		static Vector3 GetVectorFromYawAndPitch(GLfloat yaw, GLfloat pitch);
+	};
 }

@@ -6,6 +6,7 @@
 
 #include "EngineBasis.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 using namespace LightGameEngine;
@@ -67,4 +68,16 @@ Vector3_struct LightGameEngine::Vector3_struct::CrossProduct(Vector3_struct vec3
 GLfloat Vector3_struct::GetNorm()
 {
 	return sqrtf(this->x * this->x + this->y * this->y + this->z * this->z);
+}
+
+Vector3 LightGameEngine::EngineBasis::GetVectorFromYawAndPitch(GLfloat yaw, GLfloat pitch)
+{
+	float yawInRadian = yaw * M_PI / 180.0;
+	float pitchInRadian = pitch * M_PI / 180.0;
+	return Vector3
+	{
+		1.f * cosf(pitchInRadian) * cosf(yawInRadian),  //x
+		1.f * sinf(pitchInRadian),						//y
+		1.f * cosf(pitchInRadian) * sinf(yawInRadian)   //z
+	};
 }

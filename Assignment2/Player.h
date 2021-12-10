@@ -55,8 +55,6 @@ namespace LightGameEngine
 		GLfloat pitchMin = -90;
 		GLfloat pitchMax = 90;
 
-		Vector3 getRelativeVecFromYawAndPitch(GLfloat yaw, GLfloat pitch);
-
 		/// <summary>
 		/// Warp yaw to valid range
 		/// </summary>

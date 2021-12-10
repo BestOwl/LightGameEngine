@@ -85,12 +85,12 @@ Vector3 Player::GetCameraPos()
 
 Vector3 Player::GetLookAtVector()
 {
-	return this->getRelativeVecFromYawAndPitch(this->yaw, this->pitch);
+	return EngineBasis::GetVectorFromYawAndPitch(this->yaw, this->pitch);
 }
 
 Vector3 Player::GetUpVector()
 {
-	return this->getRelativeVecFromYawAndPitch(this->GetUpVectorYaw(), this->GetUpVectorPitch());
+	return EngineBasis::GetVectorFromYawAndPitch(this->GetUpVectorYaw(), this->GetUpVectorPitch());
 }
 
 void Player::AddYaw(GLfloat degree)
@@ -129,18 +129,6 @@ GLfloat LightGameEngine::Player::GetUpVectorYaw()
 GLfloat LightGameEngine::Player::GetUpVectorPitch()
 {
 	return 90 - this->pitch;
-}
-
-Vector3 Player::getRelativeVecFromYawAndPitch(GLfloat yaw, GLfloat pitch)
-{
-	float yawInRadian = yaw * M_PI / 180.0;
-	float pitchInRadian = pitch * M_PI / 180.0;
-	return Vector3
-	{ 
-		1 * cos(pitchInRadian) * cos(yawInRadian),  //x
-		1 * sin(pitchInRadian),						//y
-		1 * cos(pitchInRadian) * sin(yawInRadian)   //z
-	};
 }
 
 GLfloat Player::wrapYaw(GLfloat yaw)

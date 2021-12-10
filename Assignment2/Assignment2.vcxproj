@@ -150,6 +150,7 @@
     <ClCompile Include="EngineUtil.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Teapot.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
@@ -163,6 +164,7 @@
     <ClInclude Include="Humanoid.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="Teapot.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
