@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 	Engine::Init(argc, argv);
 	TextureStore::Init();
 
-	Engine::SetPlayer(new Player(Vector3{ 0, 0, 0 }));
+	Engine::SetPlayer(new PlayerBase(Vector3{ 0, 0, 0 }));
 	Engine::SetSkybox(new Cube(Vector3{ 0, 0, 0 }, 5000, TextureStore::Skybox));
 
 	Engine::AddSceneObject(new Teapot(Vector3{ 500, 0, 0 }));

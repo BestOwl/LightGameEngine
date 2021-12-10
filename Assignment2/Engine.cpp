@@ -20,7 +20,7 @@ const GLint viewingHeight = 900;
 const float cameraFOV = 70; //Field Of View
 
 static std::vector<GameObject*> sceneObjects;
-static Player* _player;
+static PlayerBase* _player;
 static Cube* _skybox;
 static KeyboardStatus keyboardStatus;
 static bool isPause;
@@ -91,7 +91,7 @@ KeyboardStatus* LightGameEngine::Engine::GetKeyboardStatus()
 	return &keyboardStatus;
 }
 
-void Engine::SetPlayer(Player* obj)
+void Engine::SetPlayer(PlayerBase* obj)
 {
 	_player = obj;
 }
@@ -158,7 +158,7 @@ void RenderScene()
 	glEnable(GL_LIGHTING);
 	GLfloat light_global_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_global_ambient);
-	//glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_COLOR_MATERIAL);
 
 	Vector3 l0_pos = { 0, 500, 0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, (GLfloat*)&l0_pos);

@@ -48,7 +48,7 @@
     <ClCompile Include="Texture.cpp">
       <Filter>LightGameEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="PlayerBase.cpp">
       <Filter>LightGameEngine</Filter>
     </ClCompile>
     <ClCompile Include="Cylinder.cpp">
@@ -92,7 +92,7 @@
     <ClInclude Include="Texture.h">
       <Filter>LightGameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="PlayerBase.h">
       <Filter>LightGameEngine</Filter>
     </ClInclude>
     <ClInclude Include="Cylinder.h">

@@ -8,7 +8,7 @@
 
 namespace LightGameEngine
 {
-	class Player :
+	class PlayerBase :
 		public GameObject
 	{
 	public:

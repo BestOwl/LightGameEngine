@@ -3,7 +3,7 @@
  * Author: Hao Su <hao.su19@student.xjtlu.edu.cn>
  * Copyright (c) 2021 Hao Su
  */
-#include "Player.h"
+#include "PlayerBase.h"
 #include "Engine.h"
 
 #include <iostream>
@@ -12,13 +12,13 @@
 
 using namespace LightGameEngine;
 
-void Player::Draw()
+void PlayerBase::Draw()
 {
 	glColor3ub(0, 255, 0);
 	glutSolidCube(1);
 }
 
-bool Player::Tick()
+bool PlayerBase::Tick()
 {
 	bool dirty = false;
 	KeyboardStatus* key = Engine::GetKeyboardStatus();
@@ -60,7 +60,7 @@ bool Player::Tick()
 	return dirty;
 }
 
-void Player::SetPos(Vector3 pos)
+void PlayerBase::SetPos(Vector3 pos)
 {
 	if (this->hasMovementLimit)
 	{
@@ -76,29 +76,29 @@ void Player::SetPos(Vector3 pos)
 	GameObject::SetPos(pos);
 }
 
-Vector3 Player::GetCameraPos()
+Vector3 PlayerBase::GetCameraPos()
 {
 	Vector3 cameraPos = this->pos;
 	cameraPos.y += 10;
 	return cameraPos;
 }
 
-Vector3 Player::GetLookAtVector()
+Vector3 PlayerBase::GetLookAtVector()
 {
 	return EngineBasis::GetVectorFromYawAndPitch(this->yaw, this->pitch);
 }
 
-Vector3 Player::GetUpVector()
+Vector3 PlayerBase::GetUpVector()
 {
 	return EngineBasis::GetVectorFromYawAndPitch(this->GetUpVectorYaw(), this->GetUpVectorPitch());
 }
 
-void Player::AddYaw(GLfloat degree)
+void PlayerBase::AddYaw(GLfloat degree)
 {
 	this->yaw = this->wrapYaw(this->yaw + degree);
 }
 
-void Player::AddPitch(GLfloat degree)
+void PlayerBase::AddPitch(GLfloat degree)
 {
 	this->pitch += degree;
 	if (this->pitch > this->pitchMax)
@@ -111,27 +111,27 @@ void Player::AddPitch(GLfloat degree)
 	}
 }
 
-GLfloat Player::GetYaw()
+GLfloat PlayerBase::GetYaw()
 {
 	return this->yaw;
 }
 
-GLfloat Player::GetPitch()
+GLfloat PlayerBase::GetPitch()
 {
 	return this->pitch;
 }
 
-GLfloat LightGameEngine::Player::GetUpVectorYaw()
+GLfloat LightGameEngine::PlayerBase::GetUpVectorYaw()
 {
 	return this->wrapYaw(this->yaw + 180);
 }
 
-GLfloat LightGameEngine::Player::GetUpVectorPitch()
+GLfloat LightGameEngine::PlayerBase::GetUpVectorPitch()
 {
 	return 90 - this->pitch;
 }
 
-GLfloat Player::wrapYaw(GLfloat yaw)
+GLfloat PlayerBase::wrapYaw(GLfloat yaw)
 {
 	if (yaw > this->yawMax)
 	{

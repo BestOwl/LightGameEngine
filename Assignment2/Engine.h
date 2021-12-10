@@ -9,7 +9,7 @@
 
 #include "EngineBasis.h"
 #include "GameObject.h"
-#include "Player.h"
+#include "PlayerBase.h"
 #include "Cube.h"
 
 using namespace LightGameEngine::GeometricPrimitives;
@@ -25,7 +25,7 @@ namespace LightGameEngine
 
 		static void AddSceneObject(GameObject* obj);
 		static KeyboardStatus* GetKeyboardStatus();
-		static void SetPlayer(Player* obj);
+		static void SetPlayer(PlayerBase* obj);
 		static void SetSkybox(Cube* skybox);
 
 		static void SetPauseState(bool pause);
