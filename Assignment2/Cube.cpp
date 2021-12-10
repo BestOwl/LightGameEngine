@@ -19,15 +19,16 @@ Cube::~Cube()
 
 void Cube::Draw()
 {
-	glEnable(GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	if (this->texture != NULL)
+	{
+		glEnable(GL_TEXTURE_2D);
+	}
 
 #pragma region Front
-	this->texture->Front->BindTexture();
+	if (this->texture != NULL)
+	{
+		this->texture->Front->BindTexture();
+	}
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(1, 1);
@@ -46,7 +47,10 @@ void Cube::Draw()
 #pragma endregion
 
 #pragma region Back
-	this->texture->Back->BindTexture();
+	if (this->texture != NULL)
+	{
+		this->texture->Back->BindTexture();
+	}
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(1, 1);
@@ -65,7 +69,10 @@ void Cube::Draw()
 #pragma endregion
 
 #pragma region Left
-	this->texture->Left->BindTexture();
+	if (this->texture != NULL)
+	{
+		this->texture->Left->BindTexture();
+	}
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(0, 1);
@@ -85,7 +92,10 @@ void Cube::Draw()
 
 
 #pragma region Right
-	this->texture->Right->BindTexture();
+	if (this->texture != NULL)
+	{
+		this->texture->Right->BindTexture();
+	}
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(0, 1);
@@ -104,7 +114,10 @@ void Cube::Draw()
 #pragma endregion
 
 #pragma region Top
-	this->texture->Top->BindTexture();
+	if (this->texture != NULL)
+	{
+		this->texture->Top->BindTexture();
+	}
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(1, 0);
@@ -123,7 +136,10 @@ void Cube::Draw()
 #pragma endregion
 
 #pragma region Bottom
-	this->texture->Bottom->BindTexture();
+	if (this->texture != NULL)
+	{
+		this->texture->Bottom->BindTexture();
+	}
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(1, 1);
@@ -141,5 +157,8 @@ void Cube::Draw()
 	glEnd();
 #pragma endregion
 
-	glDisable(GL_TEXTURE_2D);
+	if (this->texture != NULL)
+	{
+		glDisable(GL_TEXTURE_2D);
+	}
 }
