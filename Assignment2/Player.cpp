@@ -24,7 +24,7 @@ bool Player::Tick()
 	KeyboardStatus* key = Engine::GetKeyboardStatus();
 	//std::cout << key->Forward << "	" << key->Backward << "	" << key->Left << "	" << key->Right << std::endl;
 
-	int step = 5;
+	GLfloat step = 0.05f;
 
 	Vector3 moveVec = { 0, 0, 0 };
 	if (key->Forward)

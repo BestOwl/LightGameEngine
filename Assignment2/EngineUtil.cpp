@@ -115,11 +115,11 @@ void EngineUtil::DrawString(std::wstring str)
 	}
 }
 
-void EngineUtil::DrawCircle2D(GLfloat cx, GLfloat cy, GLfloat r, DrawCircle2DArgs* extraArgs)
+void EngineUtil::DrawCircle2D(GLfloat cx, GLfloat cy, GLfloat r, DrawCircleArgs* extraArgs)
 {
 	GLfloat x, y, angle;
 
-	DrawCircle2DArgs arg;
+	DrawCircleArgs arg;
 	if (extraArgs == NULL)
 	{
 		arg = GetDefaultDrawCircleArgs();
@@ -139,20 +139,42 @@ void EngineUtil::DrawCircle2D(GLfloat cx, GLfloat cy, GLfloat r, DrawCircle2DArg
 	glEnd();
 }
 
-std::vector<Vector3> EngineUtil::GenCircleVertices3D(Vector3 center, GLfloat r, Vector3 normalVector, std::vector<Vector2>* out_TexCoord)
+std::vector<Vector3> EngineUtil::GenCircleVertices3D(Vector3 center, GLfloat r, Vector3 normalVector, 
+	DrawCircleArgs* extraArgs, std::vector<Vector2>* out_TexCoord)
 {
 	std::vector<Vector3> vertices;
 
 	// Calculate the axis vectors (three vectors are perpendicular to each other)
-	Vector3 a = normalVector.CrossProduct(Vector3{ 0, 0, 1 });
+	Vector3 vec = Vector3{ 0, 0, 1 };
+	if (vec == normalVector)
+	{
+		vec += Vector3{ 0, 1, 0 };
+	}
+	Vector3 a = normalVector.CrossProduct(vec);
 	a.ScaleTo(1); // to unit vector
-	Vector3 b = normalVector.CrossProduct(Vector3{ 1, 0, 0 });
+
+	vec = Vector3{ 1, 0, 0 };
+	if (vec == normalVector)
+	{
+		vec += Vector3{ 0, 1, 0 };
+	}
+	Vector3 b = normalVector.CrossProduct(vec);
 	b.ScaleTo(1);
 
-	for (GLfloat angle = 0; angle <= 2 * M_PI; angle += 0.01f)
+	DrawCircleArgs arg;
+	if (extraArgs == NULL)
 	{
-		GLfloat plane_a = cos(angle);
-		GLfloat plane_b = sin(angle);
+		arg = GetDefaultDrawCircleArgs();
+	}
+	else
+	{
+		arg = *extraArgs;
+	}
+
+	for (GLfloat angle = arg.startAngle; angle <= arg.endAngle; angle += 0.01f)
+	{
+		GLfloat plane_a = arg.xFactor * cos(angle);
+		GLfloat plane_b = arg.yFactor * sin(angle);
 
 		if (out_TexCoord != NULL)
 		{
@@ -164,6 +186,14 @@ std::vector<Vector3> EngineUtil::GenCircleVertices3D(Vector3 center, GLfloat r, 
 
 		Vector3 cp = center + v1 + v2;
 		vertices.push_back(cp);
+	}
+	if (arg.endAngle - arg.startAngle == 2 * M_PI)
+	{
+		vertices.push_back(vertices.front());
+		if (out_TexCoord != NULL)
+		{
+			out_TexCoord->push_back(out_TexCoord->front());
+		}
 	}
 
 	return vertices;
@@ -192,9 +222,9 @@ void EngineUtil::DrawRasterString(GLfloat x, GLfloat y, const char* str)
 	glDeleteLists(lists, MAX_CHAR);
 }
 
-DrawCircle2DArgs EngineUtil::GetDefaultDrawCircleArgs()
+DrawCircleArgs EngineUtil::GetDefaultDrawCircleArgs()
 {
-	return DrawCircle2DArgs {0, 2 * M_PI, 1, 1, GL_POLYGON};
+	return DrawCircleArgs {0, 2 * M_PI, 1, 1, GL_POLYGON};
 }
 
 void EngineUtil::ThrowIfFail(HRESULT hr)

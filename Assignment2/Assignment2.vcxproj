@@ -144,6 +144,8 @@
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="EngineBasis.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="GunAK47.cpp" />
     <ClCompile Include="Humanoid.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine.cpp" />
@@ -161,6 +163,8 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineUtil.h" />
+    <ClInclude Include="Gun.h" />
+    <ClInclude Include="GunAK47.h" />
     <ClInclude Include="Humanoid.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Sphere.h" />

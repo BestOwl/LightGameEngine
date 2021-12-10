@@ -39,6 +39,11 @@ Vector3 LightGameEngine::operator*(GLfloat scale, const Vector3& vec3)
 	};
 }
 
+bool LightGameEngine::operator==(const Vector3& vec3L, const Vector3& vec3R)
+{
+	return vec3L.x == vec3R.x && vec3L.y == vec3R.y && vec3L.z == vec3R.z;
+}
+
 void Vector3_struct::ScaleTo(GLfloat norm)
 {
 	GLfloat originNorm = this->GetNorm();
