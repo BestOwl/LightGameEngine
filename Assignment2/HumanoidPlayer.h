@@ -12,8 +12,9 @@ public:
     virtual void Draw() override;
     virtual Vector3 GetCameraPos() override;
 
+    GameObject* GetHoldObject();
+    void SetHoldObject(GameObject* obj);
 
 protected:
     Humanoid* body;
 };
-

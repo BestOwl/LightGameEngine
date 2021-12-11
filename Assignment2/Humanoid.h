@@ -9,10 +9,23 @@
 
 using namespace LightGameEngine;
 
-enum HandSide
+enum class HandSide
 {
     Left = 0,
-    Right
+    Right = 1
+};
+
+class Hand :
+    public GameObject
+{
+public:
+    Hand(Vector3 initPos);
+
+    GameObject* GetHoldObject();
+    void SetHoldObject(GameObject* obj);
+
+private:
+    GameObject* holdObject = nullptr;
 };
 
 class LowerArm :
@@ -20,7 +33,12 @@ class LowerArm :
 {
 public:
     LowerArm(Vector3 initPos);
-    virtual void Draw() override;
+
+    GameObject* GetHoldObject();
+    void SetHoldObject(GameObject* obj);
+
+private:
+    Hand* hand;
 };
 
 class UpperArm :
@@ -35,6 +53,9 @@ public:
 
     void SetElbowYaw(GLfloat yaw);
     void SetElbowPitch(GLfloat pitch);
+
+    GameObject* GetHoldObject();
+    void SetHoldObject(GameObject* obj);
 
 protected:
     LowerArm* lowerArm;
@@ -59,7 +80,11 @@ public:
     GLfloat GetElbowPitch(HandSide hand);
     void SetElbowPitch(HandSide hand, GLfloat pitch);
 
+    GameObject* GetHoldObject(HandSide hand);
+    void SetHoldObject(HandSide hand, GameObject* obj);
+
+
 protected:
-    UpperArm* upperArmL;
-    UpperArm* upperArmR;
+    UpperArm* upperArms[2];
+
 };

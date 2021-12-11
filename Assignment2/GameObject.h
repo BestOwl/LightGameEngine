@@ -62,7 +62,7 @@ namespace LightGameEngine
 		/// <summary>
 		/// Render the object using OpenGL
 		/// </summary>
-		virtual void Draw() = 0;
+		virtual void Draw();
 
 		/// <summary>
 		/// Update the object state

@@ -27,6 +27,10 @@ Vector3 LightGameEngine::GameObject::GetActualAcceleration()
 	};
 }
 
+void LightGameEngine::GameObject::Draw()
+{
+}
+
 bool GameObject::Tick()
 {
 	if (this->IsPhysicsEnabled)

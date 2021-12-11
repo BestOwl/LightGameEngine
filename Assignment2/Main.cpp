@@ -24,11 +24,20 @@ int main(int argc, char** argv)
 	//Engine::AddSceneObject(new Cube(Vector3{10, 10, 0}, 5, NULL));
 
 	Humanoid* human = new Humanoid(Vector3{ 0, 0, 0 });
-	human->SetShoulderYaw(HandSide::Left, 70.f);
-	human->SetShoulderPitch(HandSide::Left, 10.f);
+	human->SetShoulderYaw(HandSide::Left, 52.f);
+	human->SetShoulderPitch(HandSide::Left, -50.f);
+	human->SetElbowPitch(HandSide::Left, -50.f);
 
-	//human->SetElbowPitch(HandSide::Left, -45);
-	human->SetElbowYaw(HandSide::Left, 45);
+	human->SetShoulderYaw(HandSide::Right, 40.f);
+	human->SetShoulderPitch(HandSide::Right, -10.f);
+	human->SetElbowYaw(HandSide::Right, 110.f);
+
+	GunAK47* gunAk = new GunAK47(Vector3{ 0,0, -0.1f });
+	gunAk->Rotation.z = -145.f;
+	gunAk->Rotation.x = -10.f;
+	gunAk->Rotation.y = -10.f;
+	human->SetHoldObject(HandSide::Right, gunAk);
+
 	Engine::AddSceneObject(human);
 
 	Engine::Run();
