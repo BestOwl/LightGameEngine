@@ -147,9 +147,11 @@
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="GunAK47.cpp" />
     <ClCompile Include="Humanoid.cpp" />
+    <ClCompile Include="HumanoidPlayer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EngineUtil.cpp" />
+    <ClCompile Include="ControlPlayer.cpp" />
     <ClCompile Include="PlayerBase.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Teapot.cpp" />
@@ -166,6 +168,8 @@
     <ClInclude Include="Gun.h" />
     <ClInclude Include="GunAK47.h" />
     <ClInclude Include="Humanoid.h" />
+    <ClInclude Include="HumanoidPlayer.h" />
+    <ClInclude Include="ControlPlayer.h" />
     <ClInclude Include="PlayerBase.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Teapot.h" />

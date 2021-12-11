@@ -7,8 +7,7 @@
 #include "Engine.h"
 
 #include <iostream>
-#define _USE_MATH_DEFINES
-#include <math.h>
+
 
 using namespace LightGameEngine;
 
@@ -16,48 +15,6 @@ void PlayerBase::Draw()
 {
 	glColor3ub(0, 255, 0);
 	glutSolidCube(1);
-}
-
-bool PlayerBase::Tick()
-{
-	bool dirty = false;
-	KeyboardStatus* key = Engine::GetKeyboardStatus();
-	//std::cout << key->Forward << "	" << key->Backward << "	" << key->Left << "	" << key->Right << std::endl;
-
-	GLfloat step = 0.05f;
-
-	Vector3 moveVec = { 0, 0, 0 };
-	if (key->Forward)
-	{
-		GLfloat yawInRadians = this->yaw * M_PI / 180;
-		moveVec += Vector3{ cos(yawInRadians) * step, 0, sin(yawInRadians) * step };
-		dirty = true;
-	}
-	if (key->Backward)
-	{
-		GLfloat yawInRadians = this->yaw * M_PI / 180;
-		moveVec += Vector3{ -cos(yawInRadians) * step, 0, -sin(yawInRadians) * step };
-		dirty = true;
-	}
-	if (key->Left)
-	{
-		GLfloat yawInRadians = (this->yaw - 90) * M_PI / 180;
-		moveVec += Vector3{ cos(yawInRadians) * step, 0, sin(yawInRadians) * step };
-		dirty = true;
-	}
-	if (key->Right)
-	{
-		GLfloat yawInRadians = (this->yaw + 90) * M_PI / 180;
-		moveVec += Vector3{ cos(yawInRadians) * step, 0, sin(yawInRadians) * step };
-		dirty = true;
-	}
-
-	if (dirty)
-	{
-		this->SetPos(this->GetPos() + moveVec);
-	}
-
-	return dirty;
 }
 
 void PlayerBase::SetPos(Vector3 pos)

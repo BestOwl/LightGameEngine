@@ -13,12 +13,11 @@ namespace LightGameEngine
 	{
 	public:
 		using GameObject::GameObject;
-		virtual void Draw();
-		virtual bool Tick();
+		virtual void Draw() override;
 
 		virtual void SetPos(Vector3 pos);
 
-		Vector3 GetCameraPos();
+		virtual Vector3 GetCameraPos();
 		/// <summary>
 		/// Get the reference point vector (camera pos as origin) used in glLookAt.
 		/// </summary>

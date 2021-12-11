@@ -66,6 +66,12 @@
     <ClCompile Include="GunAK47.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ControlPlayer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanoidPlayer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Teapot.h">
@@ -108,6 +114,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="GunAK47.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlPlayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanoidPlayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
