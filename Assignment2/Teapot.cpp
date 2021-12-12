@@ -1,7 +1,5 @@
 #include "Teapot.h"
 
-#include <GL/freeglut.h>
-
 void Teapot::Draw()
 {
 	glColor3ub(125, 125, 125);

@@ -25,6 +25,7 @@ Texture::Texture(GLubyte* buffer, GLuint width, GLuint height, GLenum format)
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Texture::~Texture()
@@ -38,6 +39,11 @@ Texture::~Texture()
 void Texture::BindTexture()
 {
 	glBindTexture(GL_TEXTURE_2D, this->Name);
+}
+
+void LightGameEngine::Texture::Unbind()
+{
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Texture* Texture::LoadTexture(const std::wstring& texturePath)
@@ -227,6 +233,16 @@ end:
 			*textures[i] = errorTexture;
 		}
 	}
+}
+
+LightGameEngine::CubeTexture::CubeTexture(Texture* front, Texture* back, Texture* left, Texture* right, Texture* top, Texture* bottom)
+{
+	this->Front = front;
+	this->Back = back;
+	this->Left = left;
+	this->Right = right;
+	this->Top = top;
+	this->Bottom = bottom;
 }
 
 CubeTexture::~CubeTexture()

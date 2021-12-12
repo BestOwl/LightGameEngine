@@ -16,4 +16,5 @@ public:
 	static void Init();
 
 	static CubeTexture* Skybox;
+	static Texture* Terrain;
 };

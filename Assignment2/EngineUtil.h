@@ -5,14 +5,18 @@
  */
 #pragma once
 
-#include "EngineBasis.h"
-
-#include <GL/freeglut.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <type_traits>
 #include <string>
 #include <vector>
+
+#ifdef _WIN32
+#include <wincodec.h>
+#endif // _WIN32
+
+#include "EngineBasis.h"
+
 
 namespace LightGameEngine
 {
@@ -50,6 +54,7 @@ namespace LightGameEngine
 		static void RasterStringSelectFont(int size, int charset, const char* face);
 
 		static void ThrowIfFail(HRESULT hr);
+		static GLubyte* LoadImageFromFile(const std::wstring& imagePath, int bytePerPixel, REFWICPixelFormatGUID dstFormat, GLuint* out_imageWidth, GLuint* out_imageHeight);
 
 		template <typename T>
 		inline static void SafeRelease(T*& p)

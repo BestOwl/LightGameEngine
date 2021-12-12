@@ -5,9 +5,8 @@
  */
 #pragma once
 
-#include <GL/freeglut.h>
-#include <vector>
 
+#include <vector>
 #include "EngineBasis.h"
 
 namespace LightGameEngine

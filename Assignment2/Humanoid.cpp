@@ -8,8 +8,6 @@
 #include "Cube.h"
 #include "Sphere.h"
 
-#include <GL/freeglut.h>
-
 using namespace LightGameEngine::GeometricPrimitives;
 
 Humanoid::Humanoid(Vector3 initPos) : GameObject(initPos)

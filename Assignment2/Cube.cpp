@@ -19,11 +19,6 @@ Cube::~Cube()
 
 void Cube::Draw()
 {
-	if (this->texture != NULL)
-	{
-		glEnable(GL_TEXTURE_2D);
-	}
-
 #pragma region Front
 	if (this->texture != NULL)
 	{
@@ -44,6 +39,7 @@ void Cube::Draw()
 	glVertex3f(offset, offset, -offset);
 
 	glEnd();
+	Texture::Unbind();
 #pragma endregion
 
 #pragma region Back
@@ -66,6 +62,7 @@ void Cube::Draw()
 	glVertex3f(-offset, offset, offset);
 
 	glEnd();
+	Texture::Unbind();
 #pragma endregion
 
 #pragma region Left
@@ -88,6 +85,7 @@ void Cube::Draw()
 	glVertex3f(-offset, offset, offset);
 
 	glEnd();
+	Texture::Unbind();
 #pragma endregion
 
 
@@ -111,6 +109,7 @@ void Cube::Draw()
 	glVertex3f(offset, offset, -offset);
 
 	glEnd();
+	Texture::Unbind();
 #pragma endregion
 
 #pragma region Top
@@ -133,6 +132,7 @@ void Cube::Draw()
 	glVertex3f(offset, offset, -offset);
 
 	glEnd();
+	Texture::Unbind();
 #pragma endregion
 
 #pragma region Bottom
@@ -155,10 +155,8 @@ void Cube::Draw()
 	glVertex3f(offset, -offset, -offset);
 
 	glEnd();
+	Texture::Unbind();
 #pragma endregion
 
-	if (this->texture != NULL)
-	{
-		glDisable(GL_TEXTURE_2D);
-	}
+
 }

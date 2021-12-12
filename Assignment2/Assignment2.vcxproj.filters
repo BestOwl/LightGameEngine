@@ -24,15 +24,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Teapot.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Humanoid.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>GeometricPrimitives</Filter>
-    </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>LightGameEngine</Filter>
     </ClCompile>
@@ -51,13 +42,16 @@
     <ClCompile Include="PlayerBase.cpp">
       <Filter>LightGameEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>GeometricPrimitives</Filter>
+    </ClCompile>
     <ClCompile Include="Cylinder.cpp">
       <Filter>GeometricPrimitives</Filter>
     </ClCompile>
     <ClCompile Include="Sphere.cpp">
       <Filter>GeometricPrimitives</Filter>
     </ClCompile>
-    <ClCompile Include="TextureStore.cpp">
+    <ClCompile Include="ControlPlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Gun.cpp">
@@ -66,23 +60,20 @@
     <ClCompile Include="GunAK47.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ControlPlayer.cpp">
+    <ClCompile Include="Humanoid.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="HumanoidPlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Teapot.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureStore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Teapot.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Humanoid.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>GeometricPrimitives</Filter>
-    </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>LightGameEngine</Filter>
     </ClInclude>
@@ -101,48 +92,45 @@
     <ClInclude Include="PlayerBase.h">
       <Filter>LightGameEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>GeometricPrimitives</Filter>
+    </ClInclude>
     <ClInclude Include="Cylinder.h">
       <Filter>GeometricPrimitives</Filter>
     </ClInclude>
     <ClInclude Include="Sphere.h">
       <Filter>GeometricPrimitives</Filter>
     </ClInclude>
-    <ClInclude Include="TextureStore.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="ControlPlayer.h">
+      <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="Gun.h">
-      <Filter>头文件</Filter>
+      <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="GunAK47.h">
-      <Filter>头文件</Filter>
+      <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="ControlPlayer.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="Humanoid.h">
+      <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="HumanoidPlayer.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Teapot.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureStore.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="cube_demo.bmp">
+    <Image Include="Assets\heightmap.png">
       <Filter>资源文件</Filter>
     </Image>
-    <Image Include="skybox_back.bmp">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="skybox_bottom.bmp">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="skybox_front.bmp">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="skybox_left.bmp">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="skybox_right.bmp">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="skybox_top.bmp">
+    <Image Include="Assets\skybox.jpg">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

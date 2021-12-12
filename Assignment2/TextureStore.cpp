@@ -7,8 +7,10 @@
 #include "TextureStore.h"
 
 CubeTexture* TextureStore::Skybox;
+Texture* TextureStore::Terrain;
 
 void TextureStore::Init()
 {
-	Skybox = new CubeTexture(L"skybox.jpg");
+	Skybox = new CubeTexture(L"Assets/skybox.jpg");
+	Terrain = Texture::LoadTexture(L"Assets/terrain.jpg");
 }

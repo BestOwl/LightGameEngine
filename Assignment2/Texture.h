@@ -6,9 +6,10 @@
 
 #pragma once
 
-#include <GL/freeglut.h>
 #include <string>
 #include <wincodec.h>
+
+#include "EngineBasis.h"
 
 namespace LightGameEngine
 {
@@ -22,6 +23,7 @@ namespace LightGameEngine
 
 		GLuint Name;
 
+		static void Unbind();
 		static Texture* LoadTexture(const std::wstring& texturePath);
 		static Texture* MakeErrorTexture();
 
@@ -35,6 +37,7 @@ namespace LightGameEngine
 	{
 	public:
 		CubeTexture(const std::wstring& texturePath);
+		CubeTexture(Texture* front, Texture* back, Texture* left, Texture* right, Texture* top, Texture* bottom);
 		~CubeTexture();
 
 		Texture* Front = nullptr;

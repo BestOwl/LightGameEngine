@@ -4,13 +4,14 @@
  * Copyright (c) 2021 Hao Su
  */
 
-#include "Engine.h"
-#include "EngineUtil.h"
-
+#include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+
+#include "Engine.h"
+#include "EngineUtil.h"
 
 using namespace LightGameEngine;
 
@@ -51,6 +52,11 @@ void Engine::Init(int argc, char** argv)
 	QueryPerformanceFrequency(&pfc_frequency);
 
 	glutCreateWindow("Assignment 2");
+	GLenum err = glewInit();
+	if (err != GLEW_OK)
+	{
+		throw;
+	}
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -152,19 +158,23 @@ void RenderScene()
 	glVertex3f(0, 0, 0);
 	glVertex3f(0, 0, 500);
 	glEnd();
+
 #endif // _DEBUG
 
 	// Lighting
 	glEnable(GL_LIGHTING);
 	GLfloat light_global_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_global_ambient);
-	glEnable(GL_COLOR_MATERIAL);
+	//glEnable(GL_COLOR_MATERIAL);
 
 	Vector3 l0_pos = { 0, 500, 0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, (GLfloat*)&l0_pos);
 	GLfloat l0_ambient[] = { 0.8, 0.8, 0.8 };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, l0_ambient);
 	glEnable(GL_LIGHT0);
+
+	// Texture Mapping
+	glEnable(GL_TEXTURE_2D);
 
 	// draw foreground object
 	for (GameObject* obj : sceneObjects)

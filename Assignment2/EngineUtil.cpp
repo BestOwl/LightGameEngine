@@ -4,9 +4,12 @@
  * Copyright (c) 2021 Hao Su
  */
 #include "EngineUtil.h"
+#include "Texture.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
+#include <iostream>
 
 #ifdef _WIN32
 #include <Knownfolders.h>
@@ -233,4 +236,56 @@ void EngineUtil::ThrowIfFail(HRESULT hr)
 	{
 		throw _com_error(hr);
 	}
+}
+
+GLubyte* LightGameEngine::EngineUtil::LoadImageFromFile(const std::wstring& imagePath, int bytePerPixel, REFWICPixelFormatGUID dstFormat, GLuint* out_imageWidth, GLuint* out_imageHeight)
+{
+	IWICBitmapDecoder* pDecoder = NULL;
+	IWICBitmapFrameDecode* pFrame = NULL;
+	IWICFormatConverter* pConverter = NULL;
+	GLubyte* buffer = NULL;
+	try
+	{
+		IWICImagingFactory* pWICFactory = Texture::GetWICFactory();
+
+		EngineUtil::ThrowIfFail(pWICFactory->CreateDecoderFromFilename(
+			imagePath.c_str(),
+			NULL,
+			GENERIC_READ,
+			WICDecodeMetadataCacheOnDemand,
+			&pDecoder
+		));
+
+		EngineUtil::ThrowIfFail(pDecoder->GetFrame(0, &pFrame));
+
+		pWICFactory->CreateFormatConverter(&pConverter);
+		EngineUtil::ThrowIfFail(pConverter->Initialize(
+			pFrame,							// Input bitmap source
+			dstFormat,	// Destination pixel format
+			WICBitmapDitherTypeNone,		// dither pattern
+			NULL,							// Specify a particular palette 
+			0.0f,							// Aplha threshold
+			WICBitmapPaletteTypeCustom		// Palette translation type
+		));
+
+		pConverter->GetSize(out_imageWidth, out_imageHeight);
+
+		UINT bufferSz = *out_imageWidth * *out_imageHeight * bytePerPixel;
+		buffer = new GLubyte[bufferSz];
+
+		pConverter->CopyPixels(
+			NULL, // rect to copy. NULL specifies the entire bitmap
+			*out_imageWidth * bytePerPixel,
+			bufferSz,
+			buffer
+		);
+	}
+	catch (_com_error err)
+	{
+		std::wcout << err.Description() << std::endl;
+	}
+	EngineUtil::SafeRelease(pConverter);
+	EngineUtil::SafeRelease(pFrame);
+	EngineUtil::SafeRelease(pDecoder);
+	return buffer;
 }
