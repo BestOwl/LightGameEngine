@@ -159,9 +159,11 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EngineUtil.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="PlayerBase.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Teapot.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureStore.cpp" />
   </ItemGroup>
@@ -177,10 +179,12 @@
     <ClInclude Include="GunAK47.h" />
     <ClInclude Include="Humanoid.h" />
     <ClInclude Include="HumanoidPlayer.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="PlayerBase.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Teapot.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureStore.h" />
   </ItemGroup>

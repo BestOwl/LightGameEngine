@@ -20,6 +20,7 @@ const GLint viewingWidth = 1600;
 const GLint viewingHeight = 900;
 const float cameraFOV = 70; //Field Of View
 
+static std::vector<GameObject*> stageObjects;
 static std::vector<GameObject*> sceneObjects;
 static PlayerBase* _player;
 static Cube* _skybox;
@@ -76,12 +77,11 @@ void Engine::Init(int argc, char** argv)
 	glutTimerFunc(tick_interval, OnTimer, 1);
 
 	sceneObjects = std::vector<GameObject*>();
+	stageObjects = std::vector<GameObject*>();
 }
 
 void Engine::Run()
 {
-	
-	
 	glutWarpPointer(viewingWidth / 2.0, viewingHeight / 2.0);
 
 	glutMainLoop();
@@ -92,6 +92,11 @@ void Engine::AddSceneObject(GameObject* obj)
 	sceneObjects.push_back(obj);
 }
 
+void LightGameEngine::Engine::AddStageObject(GameObject* obj)
+{
+	stageObjects.push_back(obj);
+}
+
 KeyboardStatus* LightGameEngine::Engine::GetKeyboardStatus()
 {
 	return &keyboardStatus;
@@ -99,12 +104,22 @@ KeyboardStatus* LightGameEngine::Engine::GetKeyboardStatus()
 
 void Engine::SetPlayer(PlayerBase* obj)
 {
+	if (_player != nullptr)
+	{
+		stageObjects.erase(std::remove(stageObjects.begin(), stageObjects.end(), _player));
+	}
 	_player = obj;
+	stageObjects.push_back(obj);
 }
 
 void Engine::SetSkybox(Cube* skybox)
 {
+	if (_skybox != nullptr)
+	{
+		stageObjects.erase(std::remove(stageObjects.begin(), stageObjects.end(), _skybox));
+	}
 	_skybox = skybox;
+	stageObjects.push_back(skybox);
 }
 
 void Engine::SetPauseState(bool pause)
@@ -182,9 +197,11 @@ void RenderScene()
 		RenderGameObject(obj);
 	}
 
-	RenderGameObject(_player);
 	_skybox->SetPos(_player->GetPos());
-	RenderGameObject(_skybox);
+	for (GameObject* obj : stageObjects)
+	{
+		RenderGameObject(obj);
+	}
 
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();

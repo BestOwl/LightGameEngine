@@ -72,6 +72,12 @@
     <ClCompile Include="TextureStore.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>GeometricPrimitives</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -101,28 +107,34 @@
     <ClInclude Include="Sphere.h">
       <Filter>GeometricPrimitives</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>GeometricPrimitives</Filter>
+    </ClInclude>
     <ClInclude Include="ControlPlayer.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Gun.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="GunAK47.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Humanoid.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanoidPlayer.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Teapot.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TextureStore.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="HumanoidPlayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Humanoid.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

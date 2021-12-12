@@ -23,6 +23,8 @@ HumanoidPlayer::HumanoidPlayer(Vector3 initPos) : PlayerBase(initPos)
 	gunAk->Rotation.y = -10.f;
 	body->SetHoldObject(HandSide::Right, gunAk);
 
+	this->onTerrain = nullptr;
+
 	this->pitchMax = 70;
 }
 
@@ -38,6 +40,21 @@ Vector3 HumanoidPlayer::GetCameraPos()
 
 	GLfloat yawInRadian = this->GetYaw() * M_PI / 180;
 	return this->GetPos() + Vector3{ offsetNorm * cosf(yawInRadian), 0.65f, offsetNorm * sinf(yawInRadian)};
+}
+
+void HumanoidPlayer::SetOnTerrain(Terrain* terrain)
+{
+	if (terrain == nullptr)
+	{
+		this->hasMovementLimit = false;
+	}
+	else
+	{
+		this->hasMovementLimit = true;
+		terrain->GetTerrainBound(&this->posMin, &this->posMax);
+	}
+
+	this->onTerrain = terrain;
 }
 
 GameObject* HumanoidPlayer::GetHoldObject()

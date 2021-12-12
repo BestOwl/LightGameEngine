@@ -24,7 +24,10 @@ namespace LightGameEngine
 		static void Run();
 
 		static void AddSceneObject(GameObject* obj);
+		static void AddStageObject(GameObject* obj);
+
 		static KeyboardStatus* GetKeyboardStatus();
+
 		static void SetPlayer(PlayerBase* obj);
 		static void SetSkybox(Cube* skybox);
 

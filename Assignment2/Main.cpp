@@ -1,4 +1,5 @@
 #include "Engine.h"
+
 #include "TextureStore.h"
 #include "Teapot.h"
 #include "Humanoid.h"
@@ -6,6 +7,7 @@
 #include "Sphere.h"
 #include "GunAK47.h"
 #include "ControlPlayer.h"
+#include "Terrain.h"
 
 using namespace LightGameEngine;
 
@@ -14,31 +16,40 @@ int main(int argc, char** argv)
 	Engine::Init(argc, argv);
 	TextureStore::Init();
 
-	Engine::SetPlayer(new ControlPlayer(Vector3{ 0, 0, 0 }));
+	Terrain* terrain = new Terrain(Vector3{ 0, 0, 0 }, -80.0, 80.f, 5.f, L"Assets/heightmap.png", TextureStore::Terrain);
+	Engine::AddStageObject(terrain);
+
+	ControlPlayer* player = new ControlPlayer(Vector3{ 0, 10, 0 });
+	player->SetOnTerrain(terrain);
+	Engine::SetPlayer(player);
 	Engine::SetSkybox(new Cube(Vector3{ 0, 0, 0 }, 5000, TextureStore::Skybox));
 
-	Engine::AddSceneObject(new Teapot(Vector3{ 500, 0, 0 }));
+	//Engine::AddSceneObject(new Teapot(Vector3{ 500, 0, 0 }));
 	//Engine::AddSceneObject(new Humanoid(Vector3{ 100, 100, 100 }));
 	//Engine::AddSceneObject(new GeometricPrimitives::Sphere(Vector3{ -200, -200, -200 }, 50));
 	//Engine::AddSceneObject(new GunAK47(Vector3{0, 10, 0}));
 	//Engine::AddSceneObject(new Cube(Vector3{10, 10, 0}, 5, NULL));
 
-	Humanoid* human = new Humanoid(Vector3{ 0, 0, 0 });
-	human->SetShoulderYaw(HandSide::Left, 52.f);
-	human->SetShoulderPitch(HandSide::Left, -50.f);
-	human->SetElbowPitch(HandSide::Left, -50.f);
+	//Humanoid* human = new Humanoid(Vector3{ 0, 0, 0 });
+	//human->SetShoulderYaw(HandSide::Left, 52.f);
+	//human->SetShoulderPitch(HandSide::Left, -50.f);
+	//human->SetElbowPitch(HandSide::Left, -50.f);
 
-	human->SetShoulderYaw(HandSide::Right, 40.f);
-	human->SetShoulderPitch(HandSide::Right, -10.f);
-	human->SetElbowYaw(HandSide::Right, 110.f);
+	//human->SetShoulderYaw(HandSide::Right, 40.f);
+	//human->SetShoulderPitch(HandSide::Right, -10.f);
+	//human->SetElbowYaw(HandSide::Right, 110.f);
 
-	GunAK47* gunAk = new GunAK47(Vector3{ 0,0, -0.1f });
-	gunAk->Rotation.z = -145.f;
-	gunAk->Rotation.x = -10.f;
-	gunAk->Rotation.y = -10.f;
-	human->SetHoldObject(HandSide::Right, gunAk);
+	//GunAK47* gunAk = new GunAK47(Vector3{ 0,0, -0.1f });
+	//gunAk->Rotation.z = -145.f;
+	//gunAk->Rotation.x = -10.f;
+	//gunAk->Rotation.y = -10.f;
+	//human->SetHoldObject(HandSide::Right, gunAk);
 
-	Engine::AddSceneObject(human);
+	//Engine::AddSceneObject(human);
+
+	CubeTexture t(TextureStore::Terrain, TextureStore::Terrain, TextureStore::Terrain, TextureStore::Terrain, TextureStore::Terrain, TextureStore::Terrain);
+	Cube* testCube = new Cube(Vector3{ 0,0,0 }, 1, &t);
+	Engine::AddSceneObject(testCube);
 
 	Engine::Run();
 }

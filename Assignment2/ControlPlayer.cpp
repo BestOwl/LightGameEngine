@@ -7,6 +7,8 @@
 ControlPlayer::ControlPlayer(Vector3 initPos) : HumanoidPlayer(initPos)
 {
 
+	//this->hasMovementLimit = true;
+	this->IsPhysicsEnabled = true;
 }
 
 bool ControlPlayer::Tick()
@@ -15,7 +17,7 @@ bool ControlPlayer::Tick()
 	KeyboardStatus* key = Engine::GetKeyboardStatus();
 	//std::cout << key->Forward << "	" << key->Backward << "	" << key->Left << "	" << key->Right << std::endl;
 
-	GLfloat step = 0.05f;
+	GLfloat step = 0.5f;
 
 	Vector3 moveVec = { 0, 0, 0 };
 	if (key->Forward)
@@ -45,10 +47,15 @@ bool ControlPlayer::Tick()
 
 	if (dirty)
 	{
+		if (this->onTerrain != nullptr)
+		{
+			Vector3 worldPos = this->GetPos();
+			this->posMin.y = this->onTerrain->GetHeight(worldPos.x, worldPos.z) + 0.05f;
+		}
 		this->SetPos(this->GetPos() + moveVec);
 	}
 
-	return dirty;
+	return HumanoidPlayer::Tick() || dirty;
 }
 
 
