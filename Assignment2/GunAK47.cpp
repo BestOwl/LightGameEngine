@@ -2,53 +2,39 @@
 #include "Cube.h"
 #include "Cylinder.h"
 #include "EngineUtil.h"
+#include "TextureStore.h"
 
 using namespace LightGameEngine;
 using namespace LightGameEngine::GeometricPrimitives;
 
 GunAK47::GunAK47(Vector3 initPos) : Gun(initPos)
 {
-	Cube* body = new Cube(Vector3{ 0, 0, 0 }, 1, NULL);
+	Cube* body = new Cube(Vector3{ 0, 0, 0 }, 1, TextureStore::Ak);
 	body->Scale = Vector3{ 0.8, 0.1, 0.1 };
 	this->ChildrenObjects.push_back(body);
 
-	Cylinder* barrel = new Cylinder(Vector3{ 0.3f, -0.01f, 0 }, 0.015f, 0.5f, Vector3{ 1, 0, 0 });
+	Cylinder* barrel = new Cylinder(Vector3{ 0.3f, -0.01f, 0 }, 0.015f, 0.5f, Vector3{ 1, 0, 0 }, TextureStore::Metal);
 	this->ChildrenObjects.push_back(barrel);
 
-	Cylinder* sub_barrel = new Cylinder(Vector3{ 0.25f, 0.01f, 0 }, 0.015f, 0.25f, Vector3{ 1, 0, 0 });
+	Cylinder* sub_barrel = new Cylinder(Vector3{ 0.25f, 0.01f, 0 }, 0.015f, 0.25f, Vector3{ 1, 0, 0 }, TextureStore::Metal);
 	this->ChildrenObjects.push_back(sub_barrel);
 
-	Cube* barrel_connector = new Cube(Vector3{ 0.6f, 0, 0 }, 0.1f, NULL);
+	Cube* barrel_connector = new Cube(Vector3{ 0.6f, 0, 0 }, 0.1f, TextureStore::MetalCube);
 	barrel_connector->Scale = Vector3{ 0.8f, 0.4f, 0.35f };
 	this->ChildrenObjects.push_back(barrel_connector);
 	
 	MagAK47* mag = new MagAK47(Vector3{ 0.25f,0,0 });
 	this->ChildrenObjects.push_back(mag);
 
-	Cube* hold = new Cube(Vector3{ -0.25f, -0.12f, 0 }, 1, NULL);
-	hold->Scale = Vector3{ 0.1f, 0.3f, 0.1f };
+	Cube* hold = new Cube(Vector3{ -0.25f, -0.12f, 0 }, 1, TextureStore::MetalCube);
+	hold->Scale = Vector3{ 0.09f, 0.3f, 0.09f };
 	hold->Rotation = Vector3{ 0, 0, -30 };
 	this->ChildrenObjects.push_back(hold);
 }
 
 void GunAK47::Draw()
 {
-	//const Vector3 vertices[] = 
-	//{
-	//	Vector3{0,0,0},
-	//	Vector3{0,1,0},
-	//	Vector3{1,0,0},
-	//	Vector3{2,0.5f,0},
-	//	Vector3{2,0,0},
 
-	//};
-
-	//glBegin(GL_TRIANGLE_STRIP);
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	glVertex3fv((GLfloat*)&vertices[i]);
-	//}
-	//glEnd();
 }
 
 void MagAK47::Draw()
@@ -62,10 +48,16 @@ void MagAK47::Draw()
 
 	const GLfloat magnetDepth = 0.08f;
 
+	TextureStore::AkMag->BindTexture();
+
 	glBegin(GL_TRIANGLE_STRIP);
 	for (int i = 0; i < vertices.size(); i++)
 	{
+		GLfloat texCoordV = (GLfloat)i / (GLfloat)vertices.size();
+		glTexCoord2f(0, texCoordV);
 		glVertex3fv((GLfloat*)&vertices2[i]);
+
+		glTexCoord2f(1, texCoordV);
 		glVertex3fv((GLfloat*)&vertices[i]);
 	}
 	glEnd();
@@ -74,28 +66,46 @@ void MagAK47::Draw()
 	for (int i = 0; i < vertices.size(); i++)
 	{
 		Vector3 vec = vertices2[i] + Vector3{ 0,0,magnetDepth };
+		GLfloat texCoordV = (GLfloat)i / (GLfloat)vertices.size();
+		glTexCoord2f(0, texCoordV);
 		glVertex3fv((GLfloat*)&vec);
 
 		vec = vertices[i] + Vector3{ 0,0,magnetDepth };
+		glTexCoord2f(1, texCoordV);
+		glVertex3fv((GLfloat*)&vec);
+	}
+	glEnd();
+
+	TextureStore::Metal->BindTexture();
+
+	glBegin(GL_TRIANGLE_STRIP);
+	for (GLfloat i = 0; i < vertices.size(); i++)
+	{
+		Vector3 vec = vertices[i] + Vector3{0,0,magnetDepth};
+
+		GLfloat texCoordV = i / (GLfloat)vertices.size();
+
+		glTexCoord2f(texCoordV, 0);
+		glVertex3fv((GLfloat*)&vertices[i]);
+
+		glTexCoord2f(texCoordV, 1);
 		glVertex3fv((GLfloat*)&vec);
 	}
 	glEnd();
 
 	glBegin(GL_TRIANGLE_STRIP);
-	for (Vector3 v : vertices)
+	for (GLfloat i = 0; i < vertices2.size(); i++)
 	{
-		Vector3 vec = v + Vector3{ 0,0,magnetDepth };
-		glVertex3fv((GLfloat*)&v);
+		Vector3 vec = vertices2[i] + Vector3{0,0,magnetDepth};
+		GLfloat texCoordV = i / (GLfloat)vertices2.size();
+
+		glTexCoord2f(texCoordV, 0);
+		glVertex3fv((GLfloat*)&vertices[i]);
+
+		glTexCoord2f(texCoordV, 1);
 		glVertex3fv((GLfloat*)&vec);
 	}
 	glEnd();
 
-	glBegin(GL_TRIANGLE_STRIP);
-	for (Vector3 v : vertices2)
-	{
-		Vector3 vec = v + Vector3{ 0,0,magnetDepth };
-		glVertex3fv((GLfloat*)&v);
-		glVertex3fv((GLfloat*)&vec);
-	}
-	glEnd();
+	Texture::Unbind();
 }

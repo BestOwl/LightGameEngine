@@ -42,6 +42,48 @@ Vector3 HumanoidPlayer::GetCameraPos()
 	return this->GetPos() + Vector3{ offsetNorm * cosf(yawInRadian), 0.65f, offsetNorm * sinf(yawInRadian)};
 }
 
+void HumanoidPlayer::SetPos(Vector3 pos)
+{
+	if (this->onTerrain != nullptr)
+	{
+		this->posMin.y = this->onTerrain->GetHeight(pos.x, pos.z) + 0.05f;
+	}
+	PlayerBase::SetPos(pos);
+}
+
+void HumanoidPlayer::Move(Vector3 direction)
+{
+	direction.ScaleTo(1);
+	Vector3 speedDet = this->moveSpeed * direction;
+	
+	if (speedDet.x > 0)
+	{
+		Speed.x = std::max(speedDet.x, Speed.x);
+	}
+	else
+	{
+		Speed.x = std::min(speedDet.x, Speed.x);
+	}
+
+	if (speedDet.y > 0)
+	{
+		Speed.y = std::max(speedDet.y, Speed.y);
+	}
+	else
+	{
+		Speed.y = std::min(speedDet.y, Speed.y);
+	}
+
+	if (speedDet.z > 0)
+	{
+		Speed.z = std::max(speedDet.z, Speed.z);
+	}
+	else
+	{
+		Speed.z = std::min(speedDet.z, Speed.z);
+	}
+}
+
 void HumanoidPlayer::SetOnTerrain(Terrain* terrain)
 {
 	if (terrain == nullptr)

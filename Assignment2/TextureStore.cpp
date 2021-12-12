@@ -7,10 +7,43 @@
 #include "TextureStore.h"
 
 CubeTexture* TextureStore::Skybox;
+CubeTexture* TextureStore::Ak;
+CubeTexture* TextureStore::HumanBody;
+CubeTexture* TextureStore::MetalCube;
+CubeTexture* TextureStore::UpperArmCube;
+CubeTexture* TextureStore::SkinCube;
+
 Texture* TextureStore::Terrain;
+Texture* TextureStore::Head;
+Texture* TextureStore::Metal;
+Texture* TextureStore::AkMag;
+Texture* TextureStore::Cloth;
+Texture* TextureStore::Skin;
 
 void TextureStore::Init()
 {
 	Skybox = new CubeTexture(L"Assets/skybox.jpg");
+
+	Texture* ak_side = Texture::LoadTexture(L"Assets/ak_side.png");
+	Texture* ak_top = Texture::LoadTexture(L"Assets/ak_top.png");
+	Ak = new CubeTexture(ak_side, ak_side, ak_side, ak_side, ak_top, ak_top);
+
+	Texture* humanBodyFront = Texture::LoadTexture(L"Assets/body_front.jpg");
+	Texture* humanBodySide = Texture::LoadTexture(L"Assets/body_side.jpg");
+	HumanBody = new CubeTexture(humanBodyFront, humanBodyFront, humanBodySide, humanBodySide, NULL, NULL);
+
+	
+
 	Terrain = Texture::LoadTexture(L"Assets/terrain.jpg");
+	Head = Texture::LoadTexture(L"Assets/head.jpg");
+	Metal = Texture::LoadTexture(L"Assets/metal.jpg");
+	MetalCube = new CubeTexture(Metal, Metal, Metal, Metal, Metal, Metal);
+	AkMag = Texture::LoadTexture(L"Assets/ak_mag.png");
+	Cloth = Texture::LoadTexture(L"Assets/cloth.jpg");
+	Skin = Texture::LoadTexture(L"Assets/skin.jpg");
+
+	SkinCube = new CubeTexture(Skin, Skin, Skin, Skin, Skin, Skin);
+
+	Texture* upperArm = Texture::LoadTexture(L"Assets/upper_arm.png");
+	UpperArmCube = new CubeTexture(upperArm, upperArm, upperArm, upperArm, Cloth, Skin);
 }

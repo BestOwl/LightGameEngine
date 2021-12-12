@@ -16,6 +16,7 @@ namespace LightGameEngine
 		bool Backward;
 		bool Left;
 		bool Right;
+		bool Space;
 	} KeyboardStatus;
 
 	struct Vector2_struct

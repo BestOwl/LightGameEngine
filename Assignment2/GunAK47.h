@@ -1,5 +1,6 @@
 #pragma once
 #include "Gun.h"
+#include "Texture.h"
 
 class GunAK47 :
     public Gun

@@ -7,18 +7,21 @@
 #include "Humanoid.h"
 #include "Cube.h"
 #include "Sphere.h"
+#include "TextureStore.h"
 
 using namespace LightGameEngine::GeometricPrimitives;
 
 Humanoid::Humanoid(Vector3 initPos) : GameObject(initPos)
 {
 	//this->ChildrenObjects.push_back(new Cube(Vector3{ 0, 0, 0 }, 100, L"cube_induction.png"));
-	Cube* body = new Cube(Vector3{ 0.f, 0.f, 0.f }, 1, NULL);
+	Cube* body = new Cube(Vector3{ 0.f, 0.f, 0.f }, 1, TextureStore::HumanBody);
 	body->Scale = Vector3{ 0.5f, 1.f, 0.8f };
 	this->ChildrenObjects.push_back(body);
 
-	Sphere* head = new Sphere(Vector3{ 0.f, 0.8f, 0.f }, 0.4f);
-	head->Scale = Vector3{ 0.6f, 1.f, 0.6f };
+	Sphere* head = new Sphere(Vector3{ 0.f, 0.8f, 0.f }, 0.4f, TextureStore::Head);
+	head->Rotation.x = 90;
+	head->Rotation.z = 90;
+	head->Scale = Vector3{ 0.6f, 0.6f, 1.f };
 	this->ChildrenObjects.push_back(head);
 
 	upperArms[static_cast<int>(HandSide::Left)] = new UpperArm(Vector3{ 0.1f, 0.5f, -0.45f });
@@ -83,7 +86,7 @@ GLfloat Humanoid::GetElbowPitch(HandSide hand)
 
 UpperArm::UpperArm(Vector3 initPos) : GameObject(initPos)
 {
-	Cube* arm = new Cube(Vector3{ 0.f, -0.3125f, 0.f }, 0.5f, NULL);
+	Cube* arm = new Cube(Vector3{ 0.f, -0.3125f, 0.f }, 0.5f, TextureStore::UpperArmCube);
 	arm->Scale = Vector3{ 0.2f, 1.25f, 0.2f };
 	this->ChildrenObjects.push_back(arm);
 
@@ -127,7 +130,7 @@ void UpperArm::SetHoldObject(GameObject* obj)
 
 LowerArm::LowerArm(Vector3 initPos) : GameObject(initPos)
 {
-	Cube* arm = new Cube(Vector3{ 0.f, -0.25f, 0.f }, 0.5f, NULL);
+	Cube* arm = new Cube(Vector3{ 0.f, -0.25f, 0.f }, 0.5f, TextureStore::SkinCube);
 	arm->Scale = Vector3{ 0.2f, 1.25f, 0.2f };
 	this->ChildrenObjects.push_back(arm);
 
@@ -147,7 +150,7 @@ void LowerArm::SetHoldObject(GameObject* obj)
 
 Hand::Hand(Vector3 initPos) : GameObject(initPos)
 {
-	Sphere* hand = new Sphere(Vector3{ 0.f, 0.f, 0.f }, 0.05f);
+	Sphere* hand = new Sphere(Vector3{ 0.f, 0.f, 0.f }, 0.05f, TextureStore::Skin);
 	this->ChildrenObjects.push_back(hand);
 }
 

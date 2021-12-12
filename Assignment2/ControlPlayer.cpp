@@ -44,15 +44,20 @@ bool ControlPlayer::Tick()
 		moveVec += Vector3{ cosf(yawInRadians) * step, 0, sinf(yawInRadians) * step };
 		dirty = true;
 	}
+	if (key->Space)
+	{
+		//printf_s("Y speed: %f", this->Speed.y);
+  		if (this->Speed.y == 0)
+		{
+			
+		}
+		moveVec += Vector3{ 0, 1, 0 };
+		dirty = true;
+	}
 
 	if (dirty)
 	{
-		if (this->onTerrain != nullptr)
-		{
-			Vector3 worldPos = this->GetPos();
-			this->posMin.y = this->onTerrain->GetHeight(worldPos.x, worldPos.z) + 0.05f;
-		}
-		this->SetPos(this->GetPos() + moveVec);
+		this->Move(moveVec);
 	}
 
 	return HumanoidPlayer::Tick() || dirty;

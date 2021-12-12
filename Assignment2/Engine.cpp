@@ -178,6 +178,7 @@ void RenderScene()
 
 	// Lighting
 	glEnable(GL_LIGHTING);
+	glShadeModel(GL_SMOOTH);
 	GLfloat light_global_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_global_ambient);
 	//glEnable(GL_COLOR_MATERIAL);
@@ -413,6 +414,10 @@ void KeyboardDown(unsigned char key, int x, int y)
 	case 'd':
 		keyboardStatus.Right = true;
 		break;
+	case ' ':
+		keyboardStatus.Space = true;
+		std::cout << "Jump status set" << std::endl;
+		break;
 	default:
 		break;
 	}
@@ -438,7 +443,19 @@ void KeyboardUp(unsigned char key, int x, int y)
 	case 'd':
 		keyboardStatus.Right = false;
 		break;
+	case ' ':
+		keyboardStatus.Space = false;
+		std::cout << "Jump status clear" << std::endl;
+		break;
 	default:
 		break;
 	}
+}
+
+void SpecialKeyDown(int key, int x, int y)
+{
+}
+
+void SpecialKeyUp(int key, int x, int y)
+{
 }

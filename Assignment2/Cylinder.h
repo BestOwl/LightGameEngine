@@ -18,14 +18,14 @@ namespace LightGameEngine::GeometricPrimitives
         public GameObject
     {
     public:
-        Cylinder(Vector3 initPos, GLfloat radius, GLfloat height, Vector3 axisVector);
-        ~Cylinder();
+        Cylinder(Vector3 initPos, GLfloat radius, GLfloat height, Vector3 axisVector, Texture* texture = NULL);
         virtual void Draw() override;
 
     protected:
         GLfloat radius;
         GLfloat height;
         Vector3 axisVector;
+        Texture* texture;
 
     private:
         Vector3 offset;
