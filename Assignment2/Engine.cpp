@@ -39,8 +39,11 @@ void RenderGameObject(GameObject* obj);
 void OnTimer(int value);
 void MouseMovePassive(int x, int y);
 void OnMouseEntry(int entry);
+
 void KeyboardDown(unsigned char key, int x, int y);
 void KeyboardUp(unsigned char key, int x, int y);
+void SpecialKeyDown(int key, int x, int y);
+void SpecialKeyUp(int key, int x, int y);
 
 void Engine::Init(int argc, char** argv)
 {
@@ -72,12 +75,17 @@ void Engine::Init(int argc, char** argv)
 
 	glutKeyboardFunc(KeyboardDown);
 	glutKeyboardUpFunc(KeyboardUp);
+	glutSpecialFunc(SpecialKeyDown);
+	glutSpecialUpFunc(SpecialKeyUp);
+
 	//glutReshapeFunc(Reshape);
 	//glutIdleFunc(IdleDisplay);
 	glutTimerFunc(tick_interval, OnTimer, 1);
 
 	sceneObjects = std::vector<GameObject*>();
 	stageObjects = std::vector<GameObject*>();
+
+	debugFont = EngineUtil::RasterStringSelectFont(20, ANSI_CHARSET, "Consolas Bold");
 }
 
 void Engine::Run()
@@ -130,6 +138,11 @@ void Engine::SetPauseState(bool pause)
 bool LightGameEngine::Engine::GetPauseState()
 {
 	return isPause;
+}
+
+void LightGameEngine::Engine::RenderOverlayUICallback(std::function<void()> func)
+{
+	_renderOverlayUICallback = func;
 }
 
 void RenderScene()
@@ -231,40 +244,42 @@ void RenderScene()
 		pfc_counter_last = pfc_counter;
 	}
 
+	_renderOverlayUICallback();
+
 
 #ifdef _DEBUG
-	EngineUtil::RasterStringSelectFont(20, ANSI_CHARSET, "Cascadia Code");
+	
 	glColor3ub(255, 255, 255);
-	EngineUtil::DrawRasterString(4, 20, "Debug Mode");
+	EngineUtil::DrawRasterString(debugFont, 4, 20, "Debug Mode");
 
 	std::stringstream ss = std::stringstream();
 	ss << "FPS: " << fps;
-	EngineUtil::DrawRasterString(104, 20, ss.str().c_str());
+	EngineUtil::DrawRasterString(debugFont, 104, 20, ss.str());
 
-	//ss = std::stringstream();
-	//Vector3 pos = objPlayer->GetPos();
-	//ss << "Player Pos: " << std::fixed << std::setprecision(3) << "x: " << pos.x << "  y: " << pos.y << "  z: " << pos.z;
-	//EngineUtil::DrawRasterString(4, 40, ss.str().c_str());
+	ss = std::stringstream();
+	Vector3 pos = _player->GetPos();
+	ss << "Player Pos: " << std::fixed << std::setprecision(3) << "x: " << pos.x << "  y: " << pos.y << "  z: " << pos.z;
+	EngineUtil::DrawRasterString(debugFont, 4, 40, ss.str().c_str());
 
-	//ss = std::stringstream();
-	//ss << "Camera Pos: " << std::fixed << std::setprecision(3) << "x: " << cameraPos.x << "  y: " << cameraPos.y << "  z: " << cameraPos.z;
-	//EngineUtil::DrawRasterString(4, 60, ss.str().c_str());
+	ss = std::stringstream();
+	ss << "Camera Pos: " << std::fixed << std::setprecision(3) << "x: " << cameraPos.x << "  y: " << cameraPos.y << "  z: " << cameraPos.z;
+	EngineUtil::DrawRasterString(debugFont, 4, 60, ss.str().c_str());
 
-	//ss = std::stringstream();
-	//ss << "LookAt Vector: " << std::fixed << std::setprecision(3) << "x: " << lookAtVector.x << "  y: " << lookAtVector.y << "  z: " << lookAtVector.z;
-	//EngineUtil::DrawRasterString(4, 80, ss.str().c_str());
+	ss = std::stringstream();
+	ss << "LookAt Vector: " << std::fixed << std::setprecision(3) << "x: " << lookAtVector.x << "  y: " << lookAtVector.y << "  z: " << lookAtVector.z;
+	EngineUtil::DrawRasterString(debugFont, 4, 80, ss.str().c_str());
 
-	//ss = std::stringstream();
-	//ss << "UpVector Pos: " << std::fixed << std::setprecision(3) << "x: " << upVector.x << "  y: " << upVector.y << "  z: " << upVector.z;
-	//EngineUtil::DrawRasterString(4, 100, ss.str().c_str());
+	ss = std::stringstream();
+	ss << "UpVector Pos: " << std::fixed << std::setprecision(3) << "x: " << upVector.x << "  y: " << upVector.y << "  z: " << upVector.z;
+	EngineUtil::DrawRasterString(debugFont, 4, 100, ss.str().c_str());
 
-	//ss = std::stringstream();
-	//ss << std::fixed << std::setprecision(3) << "Yaw: " << objPlayer->GetYaw() << "  Pitch: " << objPlayer->GetPitch();
-	//EngineUtil::DrawRasterString(4, 120, ss.str().c_str());
+	ss = std::stringstream();
+	ss << std::fixed << std::setprecision(3) << "Yaw: " << _player->GetYaw() << "  Pitch: " << _player->GetPitch();
+	EngineUtil::DrawRasterString(debugFont, 4, 120, ss.str().c_str());
 
-	//ss = std::stringstream();
-	//ss << std::fixed << std::setprecision(3) << "UpVector Yaw: " << objPlayer->GetUpVectorYaw() << "  UpVector Pitch: " << objPlayer->GetUpVectorPitch();
-	//EngineUtil::DrawRasterString(4, 140, ss.str().c_str());
+	ss = std::stringstream();
+	ss << std::fixed << std::setprecision(3) << "UpVector Yaw: " << _player->GetUpVectorYaw() << "  UpVector Pitch: " << _player->GetUpVectorPitch();
+	EngineUtil::DrawRasterString(debugFont, 4, 140, ss.str().c_str());
 
 #endif
 

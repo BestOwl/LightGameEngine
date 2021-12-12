@@ -6,6 +6,7 @@
 #pragma once
 
 #include <vector>
+#include <functional>
 
 #include "EngineBasis.h"
 #include "GameObject.h"
@@ -33,6 +34,8 @@ namespace LightGameEngine
 
 		static void SetPauseState(bool pause);
 		static bool GetPauseState();
+
+		static void RenderOverlayUICallback(std::function<void()> func);
 
 	};
 	

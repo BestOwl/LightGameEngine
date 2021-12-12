@@ -36,22 +36,29 @@ namespace LightGameEngine
 		GLenum drawMode;
 	};
 
+	class BitmapFont
+	{
+	public:
+		BitmapFont(GLuint bitmapFontLists);
+		~BitmapFont();
+
+		void DrawString(const std::string& str);
+
+	private:
+		GLuint bitmapFontLists;
+	};
+
 	class EngineUtil
 	{
 	public:
-		static void Init();
-
-		static void SelectFont(int size, const char* face);
-		static void DrawString(std::wstring str);
-
 		static DrawCircleArgs GetDefaultDrawCircleArgs();
 		static void DrawCircle2D(GLfloat cx, GLfloat cy, GLfloat r, DrawCircleArgs* extraArgs);
 
 		static std::vector<Vector3> GenCircleVertices3D(Vector3 center, GLfloat r, Vector3 normalVector, 
 			DrawCircleArgs* extraArgs = NULL, std::vector<Vector2>* out_TexCoord = NULL);
 
-		static void DrawRasterString(GLfloat x, GLfloat y, const char* str);
-		static void RasterStringSelectFont(int size, int charset, const char* face);
+		static void DrawRasterString(BitmapFont* font, GLfloat x, GLfloat y, const std::string& str);
+		static BitmapFont* RasterStringSelectFont(int size, int charset, const char* face);
 
 		static void ThrowIfFail(HRESULT hr);
 		static GLubyte* LoadImageFromFile(const std::wstring& imagePath, int bytePerPixel, REFWICPixelFormatGUID dstFormat, GLuint* out_imageWidth, GLuint* out_imageHeight);
@@ -65,7 +72,6 @@ namespace LightGameEngine
 				p = NULL;
 			}
 		}
-
 	};
 
 }
