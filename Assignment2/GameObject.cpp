@@ -93,12 +93,12 @@ bool GameObject::Tick()
 
 			if (this->aabb != nullptr)
 			{
-				AABBox* aabb = CollisionEngine::GetInstance()->HitTest(this->aabb);
-				if (aabb != nullptr)
+				std::vector<AABBox*> aabbes = CollisionEngine::GetInstance()->HitTest(this->aabb);
+				for (AABBox* bbox : aabbes)
 				{
-					if (aabb->Obj != nullptr)
+					if (bbox->Obj != nullptr)
 					{
-						this->OnHit(aabb->Obj);
+						this->OnHit(bbox->Obj);
 					}
 				}
 			}

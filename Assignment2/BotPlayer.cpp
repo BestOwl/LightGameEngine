@@ -6,7 +6,7 @@
 
 BotPlayer::BotPlayer(Vector3 initPos, ControlPlayer* mainPlayer, std::function<void()> killedCallback) : HumanoidPlayer(initPos)
 {
-    this->moveSpeed = 0.05f;
+    this->moveSpeed = 0.2f;
     this->IsPhysicsEnabled = true;
     this->killedCallback = killedCallback;
     this->mainPlayer = mainPlayer;
@@ -43,5 +43,9 @@ void BotPlayer::Move(Vector3 direction)
     else
     {
         this->yaw = atanf(direction.z / direction.x) * 180.f / M_PI;
+        if (direction.x < 0)
+        {
+            this->yaw = this->wrapYaw(this->yaw + 180);
+        }
     }
 }

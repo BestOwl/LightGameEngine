@@ -9,8 +9,9 @@ using namespace LightGameEngine;
 
 CollisionEngine* CollisionEngine::_collisionEngine;
 
-AABBox* CollisionEngine::HitTest(AABBox* aabb)
+std::vector<AABBox*> CollisionEngine::HitTest(AABBox* aabb)
 {
+    std::vector<AABBox*> aabbes;
     auto i_aabb = std::begin(this->AabbBoxes);
     while (i_aabb != std::end(this->AabbBoxes))
     {
@@ -26,14 +27,14 @@ AABBox* CollisionEngine::HitTest(AABBox* aabb)
             {
                 if (this->hitTest(aabb, p_Aabb))
                 {
-                    return p_Aabb;
+                    aabbes.push_back(p_Aabb);
                 }
             }
 
             ++i_aabb;
         }
     }
-    return nullptr;
+    return aabbes;
 }
 
 bool CollisionEngine::hitTest(AABBox* a, AABBox* b)

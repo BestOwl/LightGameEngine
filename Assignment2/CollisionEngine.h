@@ -12,7 +12,7 @@ namespace LightGameEngine
 	{
 	public:
 		std::vector<AABBox*> AabbBoxes;
-		AABBox* HitTest(AABBox* aabb);
+		std::vector<AABBox*> HitTest(AABBox* aabb);
 
 		static CollisionEngine* GetInstance();
 

@@ -13,6 +13,7 @@ CubeTexture* TextureStore::MetalCube;
 CubeTexture* TextureStore::UpperArmCube;
 CubeTexture* TextureStore::SkinCube;
 CubeTexture* TextureStore::ReadPointScope;
+CubeTexture* TextureStore::WoodBox;
 
 Texture* TextureStore::Terrain;
 Texture* TextureStore::Head;
@@ -52,4 +53,7 @@ void TextureStore::Init()
 	Texture* redPointScope = Texture::LoadTexture(L"Assets/red_point.png");
 	Texture* redPointScopeBack = Texture::LoadTexture(L"Assets/red_point_back.png");
 	ReadPointScope = new CubeTexture(redPointScope, redPointScopeBack, Metal, Metal, Metal, Metal);
+
+	Texture* box = Texture::LoadTexture(L"Assets/box.jpg");
+	WoodBox = new CubeTexture(box, box, box, box, box, box);
 }

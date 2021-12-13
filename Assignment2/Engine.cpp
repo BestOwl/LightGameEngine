@@ -206,15 +206,17 @@ void RenderScene()
 	// Lighting
 	glEnable(GL_LIGHTING);
 	glShadeModel(GL_SMOOTH);
-	GLfloat light_global_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat light_global_ambient[] = { 0.4, 0.4, 0.4, 1.0 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_global_ambient);
-	//glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_COLOR_MATERIAL);
 
 	Vector3 l0_pos = { 0, 500, 0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, (GLfloat*)&l0_pos);
-	GLfloat l0_ambient[] = { 0.8, 0.8, 0.8 };
+	GLfloat l0_ambient[] = { 0.7, 0.7, 0.7, 1.0f };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, l0_ambient);
 	glEnable(GL_LIGHT0);
+
+
 
 	// Texture Mapping
 	glEnable(GL_TEXTURE_2D);
@@ -263,16 +265,10 @@ void RenderScene()
 		_renderOverlayUICallback();
 	}
 
-
-#ifdef _DEBUG
-	
-	glColor3ub(255, 255, 255);
-	EngineUtil::DrawRasterString(debugFont, 4, 20, "Debug Mode");
-
 	std::stringstream ss = std::stringstream();
 	ss << "FPS: " << fps;
-	EngineUtil::DrawRasterString(debugFont, 104, 20, ss.str());
-
+	EngineUtil::DrawRasterString(debugFont, 4, 20, ss.str());
+#ifdef _DEBUG
 	ss = std::stringstream();
 	Vector3 pos = _player->GetPos();
 	ss << "Player Pos: " << std::fixed << std::setprecision(3) << "x: " << pos.x << "  y: " << pos.y << "  z: " << pos.z;

@@ -57,14 +57,14 @@ void RenderOverlayUI()
 	ss << "Ammo: " << gun->GetCurrentAmmo() << " / " << gun->GetAmmoCapacity();
 	EngineUtil::DrawRasterString(font, 20, 850, ss.str());
 
-	glColor4ub(255, 155, 155, 255);
+	//glColor4ub(255, 155, 155, 255);
 	EngineUtil::DrawRasterString(fontSmall, 20, 200, "Your Mission: ");
 	EngineUtil::DrawRasterString(fontSmall, 20, 230, "Elimiate all enemies");
 	EngineUtil::DrawRasterString(fontSmall, 20, 260, "Enemies killed: ");
 	EngineUtil::DrawRasterString(fontSmall, 220, 260, std::to_string(numberOfKills));
 
 	TextureStore::AkOrtho->BindTexture();
-	glColor4ub(255, 255, 255, 255);
+	//glColor4ub(255, 255, 255, 255);
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(0, 0);
@@ -81,11 +81,25 @@ void RenderOverlayUI()
 
 	glEnd();
 	Texture::Unbind();
+
+	//glColor4ub(0, 255, 0, 150);
+	glLineWidth(5);
+	glBegin(GL_LINES);
+	
+	const GLfloat centerX = 1600.f / 2.f;
+	const GLfloat centerY = 900.f / 2.f;
+	glVertex2f(centerX, centerY + 10);
+	glVertex2f(centerX, centerY - 10);
+
+	glVertex2f(centerX - 10, centerY);
+	glVertex2f(centerX + 10, centerY);
+
+	glEnd();
 }
 
 void TimerTock()
 {
-	for (int i = numberOfEnemies; i < 10; i++)
+	for (int i = numberOfEnemies; i < 15; i++)
 	{
 		GenEnemyForce();
 	}
@@ -107,37 +121,9 @@ int main(int argc, char** argv)
 	Engine::SetSkybox(new Cube(Vector3{ 0, 0, 0 }, 5000, TextureStore::Skybox));
 	gun = (GunAK47*) player->GetHoldObject();
 
-	//Engine::AddSceneObject(new Teapot(Vector3{ 5, 0, 0 }));
-
-	//BotPlayer* bot =  new BotPlayer{ Vector3{5, 0.f, 5} , NULL};
-	//bot->SetOnTerrain(terrain);
-	//Engine::AddSceneObject(bot);
-
-	//Engine::AddSceneObject(new Humanoid(Vector3{ 100, 100, 100 }));
-	//Engine::AddSceneObject(new GeometricPrimitives::Sphere(Vector3{ -200, -200, -200 }, 50));
-	//Engine::AddSceneObject(new GunAK47(Vector3{0, 10, 0}));
-	//Engine::AddSceneObject(new Cube(Vector3{10, 10, 0}, 5, NULL));
-
-	//Humanoid* human = new Humanoid(Vector3{ 0, 0, 0 });
-	//human->SetShoulderYaw(HandSide::Left, 52.f);
-	//human->SetShoulderPitch(HandSide::Left, -50.f);
-	//human->SetElbowPitch(HandSide::Left, -50.f);
-
-	//human->SetShoulderYaw(HandSide::Right, 40.f);
-	//human->SetShoulderPitch(HandSide::Right, -10.f);
-	//human->SetElbowYaw(HandSide::Right, 110.f);
-
-	//GunAK47* gunAk = new GunAK47(Vector3{ 0,0, -0.1f });
-	//gunAk->Rotation.z = -145.f;
-	//gunAk->Rotation.x = -10.f;
-	//gunAk->Rotation.y = -10.f;
-	//human->SetHoldObject(HandSide::Right, gunAk);
-
-	//Engine::AddSceneObject(human);
-
-	//CubeTexture t(TextureStore::Terrain, TextureStore::Terrain, TextureStore::Terrain, TextureStore::Terrain, TextureStore::Terrain, TextureStore::Terrain);
-	//Cube* testCube = new Cube(Vector3{ 5,0,0 }, 1, NULL);
-	//Engine::AddSceneObject(testCube);
+	Cube* woodBox = new Cube(Vector3{ 600, -1.0, 600 }, 8, TextureStore::WoodBox);
+	woodBox->Rotation.z = -20.f;
+	Engine::AddSceneObject(woodBox);
 
 	Engine::RenderOverlayUICallback(std::bind(RenderOverlayUI));
 	Engine::TimerCallback(std::bind(TimerTock));

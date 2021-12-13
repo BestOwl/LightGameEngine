@@ -90,11 +90,11 @@ void HumanoidPlayer::Move(Vector3 direction)
 	GLfloat pitch = this->body->GetLegPitch(HandSide::Right);
 	if (this->legMode)
 	{
-		pitch += 0.5f;
+		pitch += 1.0f;
 	}
 	else
 	{
-		pitch -= 0.5f;
+		pitch -= 1.0f;
 	}
 	this->body->SetLegPitch(HandSide::Right, pitch);
 	this->body->SetLegPitch(HandSide::Left, -pitch);

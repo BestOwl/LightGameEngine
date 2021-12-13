@@ -22,6 +22,7 @@ public:
 	static CubeTexture* UpperArmCube;
 	static CubeTexture* SkinCube;
 	static CubeTexture* ReadPointScope;
+	static CubeTexture* WoodBox;
 
 	static Texture* Terrain;
 	static Texture* Head;
