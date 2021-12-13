@@ -9,6 +9,8 @@
 #include "GunAK47.h"
 #include "ControlPlayer.h"
 #include "Terrain.h"
+#include "BotPlayer.h"
+#include "CollisionEngine.h"
 
 #include <sstream>
 
@@ -51,8 +53,11 @@ int main(int argc, char** argv)
 	TextureStore::Init();
 	font = EngineUtil::RasterStringSelectFont(36, ANSI_CHARSET, "Consolas Bold");
 
-	Vector2 v = { 3.0f, 1.0f };
-	Vector2 v2 = v.Rotate(180);
+	//AABBManager::GetInstance()->AabbBoxes.push_back(new AABB(Vector3{ 0, 0, 0 }, Vector3{ 1, 1, 1 }, NULL));
+	//AABB* aabb = new AABB(Vector3{ 0.5, 0.5, 0.5 }, Vector3{ 1.5, 1.5, 1.5 }, NULL);
+	//AABBManager::GetInstance()->AabbBoxes.push_back(aabb);
+
+	//AABBManager::GetInstance()->HitTest(aabb);
 
 	Terrain* terrain = new Terrain(Vector3{ 0, 0, 0 }, -80.0, 80.f, 5.f, L"Assets/heightmap.png", TextureStore::Terrain);
 	Engine::AddStageObject(terrain);
@@ -65,8 +70,7 @@ int main(int argc, char** argv)
 
 	//Engine::AddSceneObject(new Teapot(Vector3{ 5, 0, 0 }));
 
-	HumanoidPlayer* bot =  new HumanoidPlayer{ Vector3{50, 50, 50} };
-	bot->IsPhysicsEnabled = true;
+	BotPlayer* bot =  new BotPlayer{ Vector3{5, 0.f, 5} };
 	bot->SetOnTerrain(terrain);
 	Engine::AddSceneObject(bot);
 

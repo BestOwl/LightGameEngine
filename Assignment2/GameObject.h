@@ -5,9 +5,10 @@
  */
 #pragma once
 
-
 #include <vector>
 #include "EngineBasis.h"
+#include "AABBox.h"
+#include "CollisionEngine.h"
 
 namespace LightGameEngine
 {
@@ -39,14 +40,17 @@ namespace LightGameEngine
 		/// </summary>
 		/// <returns></returns>
 		bool IsPhysicsEnabled = false;
+		void SetAABbox(AABBox box);
+		AABBox* GetAABbox();
+		virtual void OnHit(GameObject* hitBy);
 
 		/// <summary>
 		/// Current speed
 		/// </summary>
 		Vector3 Speed;
 
-		GLfloat Gravity = 0.3f;
-		GLfloat AirDrag = 0.1f;
+		GLfloat Gravity = 0.05f;
+		GLfloat AirDrag = 0.05f;
 
 		Vector3 Acceleration;
 		Vector3 GetActualAcceleration();
@@ -77,6 +81,10 @@ namespace LightGameEngine
 
 	protected:
 		Vector3 pos;
+
+	private:
+		AABBox* relativeAabb;
+		AABBox* aabb;
 	};
 }
 

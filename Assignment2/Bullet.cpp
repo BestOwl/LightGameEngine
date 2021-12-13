@@ -10,6 +10,7 @@ Bullet::Bullet(Vector3 initPos, Vector3 direction) : Cube(initPos, 0.3f, Texture
 	this->Speed = 5 * direction.Scale(1);
 	this->FlyTime = 1000;
 	this->currentFlyTime = 0;
+	this->SetAABbox(AABBox(Vector3{ -0.15, -0.15f, -0.15f }, Vector3{ 0.15f, 0.15f, 0.15f }));
 }
 
 bool Bullet::Tick()

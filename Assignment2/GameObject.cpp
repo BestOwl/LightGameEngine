@@ -15,6 +15,38 @@ Vector3 LightGameEngine::GameObject::GetPos()
 void LightGameEngine::GameObject::SetPos(Vector3 pos)
 {
 	this->pos = pos;
+	if (this->aabb != nullptr)
+	{
+		Vector3 pos = this->GetPos();
+		this->aabb->MinPos = pos + this->relativeAabb->MinPos;
+		this->aabb->MaxPos = pos + this->relativeAabb->MaxPos;
+	}
+}
+
+void LightGameEngine::GameObject::SetAABbox(AABBox box)
+{
+	if (this->relativeAabb)
+	{
+		relativeAabb->MinPos = box.MinPos;
+		relativeAabb->MaxPos = box.MaxPos;
+		aabb->MinPos = this->GetPos() + box.MinPos;
+		aabb->MaxPos = this->GetPos() + box.MaxPos;
+	}
+	else
+	{
+		relativeAabb = new AABBox(box.MinPos, box.MaxPos);
+		aabb = new AABBox(this->GetPos() + box.MinPos, this->GetPos() + box.MaxPos);
+		CollisionEngine::GetInstance()->AabbBoxes.push_back(aabb);
+	}
+}
+
+AABBox* LightGameEngine::GameObject::GetAABbox()
+{
+	return this->aabb;
+}
+
+void LightGameEngine::GameObject::OnHit(GameObject* hitBy)
+{
 }
 
 Vector3 LightGameEngine::GameObject::GetActualAcceleration()
@@ -29,6 +61,7 @@ Vector3 LightGameEngine::GameObject::GetActualAcceleration()
 
 void LightGameEngine::GameObject::Draw()
 {
+
 }
 
 bool GameObject::Tick()
@@ -36,10 +69,7 @@ bool GameObject::Tick()
 	if (this->IsPhysicsEnabled)
 	{
 		Vector3 accr = this->GetActualAcceleration();
-
-		this->Speed.x += accr.x;
-		this->Speed.y += accr.y;
-		this->Speed.z += accr.z;
+		this->Speed += accr;
 
 		if (abs(this->Speed.x) < 0.0001)
 		{
@@ -55,20 +85,20 @@ bool GameObject::Tick()
 		}
 
 		bool dirty = false;
-		Vector3 newPos = this->pos;
-		if (this->Speed.x != 0)
+		Vector3 newPos = this->GetPos();
+		if (!(this->Speed == Vector3{ 0, 0, 0 }))
 		{
-			newPos.x += this->Speed.x;
-			dirty = true;
-		}
-		if (this->Speed.y != 0)
-		{
-			newPos.y += this->Speed.y;
-			dirty = true;
-		}
-		if (this->Speed.z != 0)
-		{
-			newPos.z += this->Speed.z;
+			newPos += this->Speed;
+
+			if (this->aabb != nullptr)
+			{
+				AABBox* aabb = CollisionEngine::GetInstance()->HitTest(this->aabb);
+				if (aabb != nullptr)
+				{
+					printf_s("Hit!\n");
+				}
+			}
+
 			dirty = true;
 		}
 
@@ -96,5 +126,14 @@ GameObject::~GameObject()
 		{
 			delete childrenObj;
 		}
+	}
+
+	if (this->aabb)
+	{
+		this->aabb->ToBeDestoryed = true;
+	}
+	if (this->relativeAabb)
+	{
+		delete relativeAabb;
 	}
 }

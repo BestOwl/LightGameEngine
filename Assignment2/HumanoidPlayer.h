@@ -26,5 +26,8 @@ protected:
     Terrain* onTerrain;
     GLfloat moveSpeed = 0.5f;
 
+    GLfloat legWalkAngleMax = 25.0f;
+    bool legMode = false;
+
     virtual Vector3 getCameraOffset();
 };

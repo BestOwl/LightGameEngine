@@ -81,6 +81,15 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="BotPlayer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AABBox.cpp">
+      <Filter>LightGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionEngine.cpp">
+      <Filter>LightGameEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -142,6 +151,15 @@
     </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BotPlayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AABBox.h">
+      <Filter>LightGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionEngine.h">
+      <Filter>LightGameEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

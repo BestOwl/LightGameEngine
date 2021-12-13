@@ -12,6 +12,7 @@
 #include "GameObject.h"
 #include "PlayerBase.h"
 #include "Cube.h"
+#include "CollisionEngine.h"
 
 using namespace LightGameEngine::GeometricPrimitives;
 

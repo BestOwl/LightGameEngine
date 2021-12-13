@@ -302,6 +302,31 @@ void RenderGameObject(GameObject* obj)
 {
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
+
+	AABBox* aabb = obj->GetAABbox();
+	if (aabb != NULL)
+	{
+		GLfloat xLen = aabb->MaxPos.x - aabb->MinPos.x;
+		GLfloat yLen = aabb->MaxPos.y - aabb->MinPos.y;
+		GLfloat zLen = aabb->MaxPos.z - aabb->MinPos.z;
+		glBegin(GL_LINE_LOOP);
+
+
+		glVertex3f(aabb->MinPos.x, aabb->MinPos.y, aabb->MinPos.z);
+		glVertex3f(aabb->MinPos.x + xLen, aabb->MinPos.y, aabb->MinPos.z);
+		glVertex3f(aabb->MinPos.x + xLen, aabb->MinPos.y, aabb->MinPos.z + zLen);
+		glVertex3f(aabb->MinPos.x, aabb->MinPos.y, aabb->MinPos.z + zLen);
+
+		glVertex3f(aabb->MinPos.x, aabb->MinPos.y + yLen, aabb->MinPos.z);
+		glVertex3f(aabb->MinPos.x + xLen, aabb->MinPos.y + yLen, aabb->MinPos.z);
+		glVertex3f(aabb->MinPos.x + xLen, aabb->MinPos.y + yLen, aabb->MinPos.z + zLen);
+		glVertex3f(aabb->MinPos.x, aabb->MinPos.y + yLen, aabb->MinPos.z + zLen);
+
+		//glVertex3fv((GLfloat*)&this->aabb->MaxPos);
+
+		glEnd();
+	}
+
 	Vector3 pos = obj->GetPos();
 	glTranslatef(pos.x, pos.y, pos.z);
 	glRotatef(obj->Rotation.x, 1, 0, 0);

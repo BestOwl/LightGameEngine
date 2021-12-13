@@ -6,8 +6,10 @@
 
 #pragma once
 #include "GameObject.h"
+#include "Cube.h"
 
 using namespace LightGameEngine;
+using namespace LightGameEngine::GeometricPrimitives;
 
 enum class HandSide
 {
@@ -63,6 +65,13 @@ protected:
     LowerArm* lowerArm;
 };
 
+class Leg :
+    public GameObject
+{
+public:
+    Leg(Vector3 initPos);
+};
+
 class Humanoid :
     public GameObject
 {
@@ -81,6 +90,9 @@ public:
     GLfloat GetElbowPitch(HandSide hand);
     void SetElbowPitch(HandSide hand, GLfloat pitch);
 
+    GLfloat GetLegPitch(HandSide leg);
+    void SetLegPitch(HandSide leg, GLfloat pitch);
+
     GameObject* GetHoldObject(HandSide hand);
     void SetHoldObject(HandSide hand, GameObject* obj);
     Vector3 GetHandWorldPos(HandSide hand);
@@ -88,5 +100,5 @@ public:
 
 protected:
     UpperArm* upperArms[2];
-
+    Leg* legs[2];
 };

@@ -47,11 +47,6 @@ bool ControlPlayer::Tick()
 	}
 	if (key->Space)
 	{
-		//printf_s("Y speed: %f", this->Speed.y);
-  		if (this->Speed.y == 0)
-		{
-			
-		}
 		moveVec += Vector3{ 0, 1, 0 };
 		dirty = true;
 	}
@@ -61,7 +56,8 @@ bool ControlPlayer::Tick()
 		bool fireSuccessful = this->GetHoldGun()->Fire();
 		if (fireSuccessful)
 		{
-			Engine::AddSceneObject(new Bullet(this->GetPos(), this->GetLookAtVector()));
+			Vector3 lookat = this->GetLookAtVector();
+			Engine::AddSceneObject(new Bullet(this->GetCameraPos() + 4 * lookat, lookat));
 		}
 	}
 	if (key->MouseRightBtn)
@@ -99,7 +95,7 @@ Vector3 ControlPlayer::getCameraOffset()
 {
 	if (this->scopeOpend)
 	{
-		return Vector3{ 0.45f, 0.6f, 0.35f };
+		return 10 * Vector3{ 0.45f, 2.0f, 0.35f };
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 
 HumanoidPlayer::HumanoidPlayer(Vector3 initPos) : PlayerBase(initPos)
 {
-	body = new Humanoid(Vector3{ 0, 0, 0 });
+	body = new Humanoid(Vector3{ 0, 1.4f, 0 });
 	this->ChildrenObjects.push_back(body);
 
 	body->SetShoulderYaw(HandSide::Left, 52.f);
@@ -26,6 +26,11 @@ HumanoidPlayer::HumanoidPlayer(Vector3 initPos) : PlayerBase(initPos)
 	this->onTerrain = nullptr;
 
 	this->pitchMax = 70;
+
+	this->Scale = Vector3{ 10.0f, 10.0f, 10.0f };
+
+	this->body->SetLegPitch(HandSide::Right, 25);
+	this->SetAABbox(AABBox(Vector3{ -3.f, 0.f, -5.f }, Vector3{ 5.f, 26.f, 5.f }));
 }
 
 void HumanoidPlayer::Draw()
@@ -81,6 +86,22 @@ void HumanoidPlayer::Move(Vector3 direction)
 	{
 		Speed.z = std::min(speedDet.z, Speed.z);
 	}
+
+	GLfloat pitch = this->body->GetLegPitch(HandSide::Right);
+	if (this->legMode)
+	{
+		pitch += 0.1f;
+	}
+	else
+	{
+		pitch -= 0.1f;
+	}
+	this->body->SetLegPitch(HandSide::Right, pitch);
+	this->body->SetLegPitch(HandSide::Left, -pitch);
+	if (abs(pitch) > this->legWalkAngleMax)
+	{
+		this->legMode = !this->legMode;
+	}
 }
 
 void HumanoidPlayer::SetOnTerrain(Terrain* terrain)
@@ -115,5 +136,5 @@ void HumanoidPlayer::SetHoldObject(GameObject* obj)
 
 Vector3 HumanoidPlayer::getCameraOffset()
 {
-	return { 0.3f, 0.65f, 0.f };
+	return 10 * Vector3{ 0.3f, 2.0f, 0.f };
 }

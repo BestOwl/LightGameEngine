@@ -28,6 +28,11 @@ Humanoid::Humanoid(Vector3 initPos) : GameObject(initPos)
 	upperArms[static_cast<int>(HandSide::Right)] = new UpperArm(Vector3{ 0.1f, 0.5f, 0.45f });
 	this->ChildrenObjects.push_back(upperArms[static_cast<int>(HandSide::Left)]);
 	this->ChildrenObjects.push_back(upperArms[static_cast<int>(HandSide::Right)]);
+
+	legs[static_cast<int>(HandSide::Left)] = new Leg(Vector3{ 0, -0.7f, -0.3f });
+	legs[static_cast<int>(HandSide::Right)] = new Leg(Vector3{ 0, -0.7f, 0.3f });
+	this->ChildrenObjects.push_back(legs[static_cast<int>(HandSide::Left)]);
+	this->ChildrenObjects.push_back(legs[static_cast<int>(HandSide::Right)]);
 }
 
 GLfloat Humanoid::GetShoulderYaw(HandSide hand)
@@ -63,6 +68,16 @@ void Humanoid::SetElbowYaw(HandSide hand, GLfloat yaw)
 void Humanoid::SetElbowPitch(HandSide hand, GLfloat pitch)
 {
 	upperArms[static_cast<int>(hand)]->SetElbowPitch(pitch);
+}
+
+GLfloat Humanoid::GetLegPitch(HandSide leg)
+{
+	return legs[static_cast<int>(leg)]->Rotation.z;
+}
+
+void Humanoid::SetLegPitch(HandSide leg, GLfloat pitch)
+{
+	legs[static_cast<int>(leg)]->Rotation.z = pitch;
 }
 
 GameObject* Humanoid::GetHoldObject(HandSide hand)
@@ -185,4 +200,11 @@ void Hand::SetHoldObject(GameObject* obj)
 	}
 	this->holdObject = obj;
 	this->ChildrenObjects.push_back(this->holdObject);
+}
+
+Leg::Leg(Vector3 initPos) : GameObject(initPos)
+{
+	Cube* cube = new Cube(Vector3{0.f, -0.25f, 0.f}, 0.1f, NULL);
+	cube->Scale.y = 9.0f;
+	this->ChildrenObjects.push_back(cube);
 }
