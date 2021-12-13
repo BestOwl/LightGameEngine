@@ -24,8 +24,10 @@ static std::vector<GameObject*> stageObjects;
 static std::vector<GameObject*> sceneObjects;
 static PlayerBase* _player;
 static Cube* _skybox;
-static KeyboardStatus keyboardStatus;
+static InputStatus keyboardStatus;
 static bool isPause;
+static std::function<void()> _renderOverlayUICallback;
+static BitmapFont* debugFont;
 
 // fps
 static int frames;
@@ -37,15 +39,16 @@ static LARGE_INTEGER pfc_frequency;
 void RenderScene();
 void RenderGameObject(GameObject* obj);
 void OnTimer(int value);
-void MouseMovePassive(int x, int y);
+void OnMouseMove(int x, int y);
 void OnMouseEntry(int entry);
+void OnMouseButton(int button, int state, int x, int y);
 
 void KeyboardDown(unsigned char key, int x, int y);
 void KeyboardUp(unsigned char key, int x, int y);
 void SpecialKeyDown(int key, int x, int y);
 void SpecialKeyUp(int key, int x, int y);
 
-void Engine::Init(int argc, char** argv)
+void Engine::Init(int argc, char** argv, const std::string& windowName)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
@@ -55,7 +58,7 @@ void Engine::Init(int argc, char** argv)
 	EngineUtil::ThrowIfFail(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED));
 	QueryPerformanceFrequency(&pfc_frequency);
 
-	glutCreateWindow("Assignment 2");
+	glutCreateWindow(windowName.c_str());
 	GLenum err = glewInit();
 	if (err != GLEW_OK)
 	{
@@ -69,8 +72,10 @@ void Engine::Init(int argc, char** argv)
 
 	glutDisplayFunc(RenderScene);
 
-	glutPassiveMotionFunc(MouseMovePassive);
+	glutMotionFunc(OnMouseMove);
+	glutPassiveMotionFunc(OnMouseMove);
 	glutEntryFunc(OnMouseEntry);
+	glutMouseFunc(OnMouseButton);
 	glutSetCursor(GLUT_CURSOR_NONE);
 
 	glutKeyboardFunc(KeyboardDown);
@@ -105,7 +110,7 @@ void LightGameEngine::Engine::AddStageObject(GameObject* obj)
 	stageObjects.push_back(obj);
 }
 
-KeyboardStatus* LightGameEngine::Engine::GetKeyboardStatus()
+InputStatus* LightGameEngine::Engine::GetKeyboardStatus()
 {
 	return &keyboardStatus;
 }
@@ -150,6 +155,8 @@ void RenderScene()
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
+	glAlphaFunc(GL_GREATER, 0.5);
+	glEnable(GL_ALPHA_TEST);
 
 	glMatrixMode(GL_PROJECTION);
 
@@ -165,28 +172,29 @@ void RenderScene()
 		upVector.x, upVector.y, upVector.z);
 
 #ifdef _DEBUG
+	glPushAttrib(GL_CURRENT_BIT);
 	glLineWidth(1);
 	// x-axis
-	glBegin(GL_LINES);
 	glColor3ub(255, 0, 0);
+	glBegin(GL_LINES);
 	glVertex3f(0, 0, 0);
 	glVertex3f(500, 0, 0);
 	glEnd();
 
 	// y-axis
-	glBegin(GL_LINES);
 	glColor3ub(0, 255, 0);
+	glBegin(GL_LINES);
 	glVertex3f(0, 0, 0);
 	glVertex3f(0, 500, 0);
 	glEnd();
 
 	// z-axis
-	glBegin(GL_LINES);
 	glColor3ub(0, 0, 255);
+	glBegin(GL_LINES);
 	glVertex3f(0, 0, 0);
 	glVertex3f(0, 0, 500);
 	glEnd();
-
+	glPopAttrib();
 #endif // _DEBUG
 
 	// Lighting
@@ -382,7 +390,7 @@ void OnTimer(int value)
 	glutTimerFunc(tick_interval, OnTimer, 1);
 }
 
-void MouseMovePassive(int x, int y)
+void OnMouseMove(int x, int y)
 {
 	int xDev = x - (viewingWidth / 2);
 	int yDev = y - (viewingHeight / 2);
@@ -409,6 +417,45 @@ void OnMouseEntry(int entry)
 	}
 }
 
+void OnMouseButton(int button, int state, int x, int y)
+{
+	switch (button)
+	{
+	case GLUT_LEFT_BUTTON:
+		if (state == GLUT_DOWN)
+		{
+			keyboardStatus.MouseLeftBtn = true;
+		}
+		else
+		{
+			keyboardStatus.MouseLeftBtn = false;
+		}
+		break;
+	case GLUT_MIDDLE_BUTTON:
+		if (state == GLUT_DOWN)
+		{
+			keyboardStatus.MouseMiddleBtn = true;
+		}
+		else
+		{
+			keyboardStatus.MouseMiddleBtn = false;
+		}
+		break;
+	case GLUT_RIGHT_BUTTON:
+		if (state == GLUT_DOWN)
+		{
+			keyboardStatus.MouseRightBtn = true;
+		}
+		else
+		{
+			keyboardStatus.MouseRightBtn = false;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 void KeyboardDown(unsigned char key, int x, int y)
 {
 	switch (key)
@@ -432,6 +479,10 @@ void KeyboardDown(unsigned char key, int x, int y)
 	case ' ':
 		keyboardStatus.Space = true;
 		std::cout << "Jump status set" << std::endl;
+		break;
+	case 'r':
+	case 'R':
+		keyboardStatus.R = true;
 		break;
 	default:
 		break;
@@ -461,6 +512,10 @@ void KeyboardUp(unsigned char key, int x, int y)
 	case ' ':
 		keyboardStatus.Space = false;
 		std::cout << "Jump status clear" << std::endl;
+		break;
+	case 'r':
+	case 'R':
+		keyboardStatus.R = false;
 		break;
 	default:
 		break;

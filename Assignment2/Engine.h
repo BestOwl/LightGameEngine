@@ -21,13 +21,13 @@ namespace LightGameEngine
 	{
 	public:
 
-		static void Init(int argc, char** argv);
+		static void Init(int argc, char** argv, const std::string& windowName);
 		static void Run();
 
 		static void AddSceneObject(GameObject* obj);
 		static void AddStageObject(GameObject* obj);
 
-		static KeyboardStatus* GetKeyboardStatus();
+		static InputStatus* GetKeyboardStatus();
 
 		static void SetPlayer(PlayerBase* obj);
 		static void SetSkybox(Cube* skybox);

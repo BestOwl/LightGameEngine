@@ -12,6 +12,7 @@ CubeTexture* TextureStore::HumanBody;
 CubeTexture* TextureStore::MetalCube;
 CubeTexture* TextureStore::UpperArmCube;
 CubeTexture* TextureStore::SkinCube;
+CubeTexture* TextureStore::ReadPointScope;
 
 Texture* TextureStore::Terrain;
 Texture* TextureStore::Head;
@@ -19,6 +20,7 @@ Texture* TextureStore::Metal;
 Texture* TextureStore::AkMag;
 Texture* TextureStore::Cloth;
 Texture* TextureStore::Skin;
+Texture* TextureStore::AkOrtho;
 
 void TextureStore::Init()
 {
@@ -32,8 +34,6 @@ void TextureStore::Init()
 	Texture* humanBodySide = Texture::LoadTexture(L"Assets/body_side.jpg");
 	HumanBody = new CubeTexture(humanBodyFront, humanBodyFront, humanBodySide, humanBodySide, NULL, NULL);
 
-	
-
 	Terrain = Texture::LoadTexture(L"Assets/terrain.jpg");
 	Head = Texture::LoadTexture(L"Assets/head.jpg");
 	Metal = Texture::LoadTexture(L"Assets/metal.jpg");
@@ -46,4 +46,10 @@ void TextureStore::Init()
 
 	Texture* upperArm = Texture::LoadTexture(L"Assets/upper_arm.png");
 	UpperArmCube = new CubeTexture(upperArm, upperArm, upperArm, upperArm, Cloth, Skin);
+
+	AkOrtho = Texture::LoadTexture(L"Assets/ak_ortho.png");
+
+	Texture* redPointScope = Texture::LoadTexture(L"Assets/red_point.png");
+	Texture* redPointScopeBack = Texture::LoadTexture(L"Assets/red_point_back.png");
+	ReadPointScope = new CubeTexture(redPointScope, redPointScopeBack, Metal, Metal, Metal, Metal);
 }

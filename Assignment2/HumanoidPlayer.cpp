@@ -35,11 +35,10 @@ void HumanoidPlayer::Draw()
 
 Vector3 HumanoidPlayer::GetCameraPos()
 {
-	const Vector2 cameraOffset = { 0.3f, 0.f }; // offset in x and z axis
-	const GLfloat offsetNorm = sqrtf(cameraOffset.x * cameraOffset.x + cameraOffset.y * cameraOffset.y);
-
-	GLfloat yawInRadian = this->GetYaw() * M_PI / 180;
-	return this->GetPos() + Vector3{ offsetNorm * cosf(yawInRadian), 0.65f, offsetNorm * sinf(yawInRadian)};
+	Vector3 offset = this->getCameraOffset();
+	Vector2 xzOffset = Vector2{ offset.x, offset.z };
+	xzOffset = xzOffset.Rotate(this->GetYaw());
+	return this->GetPos() + Vector3{ xzOffset.x, offset.y, xzOffset.y };
 }
 
 void HumanoidPlayer::SetPos(Vector3 pos)
@@ -104,7 +103,17 @@ GameObject* HumanoidPlayer::GetHoldObject()
 	return this->body->GetHoldObject(HandSide::Right);
 }
 
+Vector3 HumanoidPlayer::GetHoldObjectWorldPos()
+{
+	return this->GetPos() + this->body->GetHandWorldPos(HandSide::Right);
+}
+
 void HumanoidPlayer::SetHoldObject(GameObject* obj)
 {
 	this->body->SetHoldObject(HandSide::Right, obj);
+}
+
+Vector3 HumanoidPlayer::getCameraOffset()
+{
+	return { 0.3f, 0.65f, 0.f };
 }

@@ -36,6 +36,7 @@ public:
 
     GameObject* GetHoldObject();
     void SetHoldObject(GameObject* obj);
+    Vector3 GetHandWorldPos();
 
 private:
     Hand* hand;
@@ -56,6 +57,7 @@ public:
 
     GameObject* GetHoldObject();
     void SetHoldObject(GameObject* obj);
+    Vector3 GetHandWorldPos();
 
 protected:
     LowerArm* lowerArm;
@@ -66,7 +68,6 @@ class Humanoid :
 {
 public:
     Humanoid(Vector3 initPos);
-    virtual void Draw() override;
 
     GLfloat GetShoulderYaw(HandSide hand);
     void SetShoulderYaw(HandSide hand, GLfloat yaw);
@@ -82,6 +83,7 @@ public:
 
     GameObject* GetHoldObject(HandSide hand);
     void SetHoldObject(HandSide hand, GameObject* obj);
+    Vector3 GetHandWorldPos(HandSide hand);
 
 
 protected:

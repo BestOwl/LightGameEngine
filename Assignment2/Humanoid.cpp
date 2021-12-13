@@ -30,10 +30,6 @@ Humanoid::Humanoid(Vector3 initPos) : GameObject(initPos)
 	this->ChildrenObjects.push_back(upperArms[static_cast<int>(HandSide::Right)]);
 }
 
-void Humanoid::Draw()
-{
-}
-
 GLfloat Humanoid::GetShoulderYaw(HandSide hand)
 {
 	return upperArms[static_cast<int>(hand)]->Rotation.z;
@@ -72,6 +68,18 @@ void Humanoid::SetElbowPitch(HandSide hand, GLfloat pitch)
 GameObject* Humanoid::GetHoldObject(HandSide hand)
 {
 	return upperArms[static_cast<int>(hand)]->GetHoldObject();
+}
+
+Vector3 Humanoid::GetHandWorldPos(HandSide hand)
+{
+	if (hand == HandSide::Left)
+	{
+		return this->GetPos() + upperArms[static_cast<int>(HandSide::Left)]->GetHandWorldPos();
+	}
+	else
+	{
+		return this->GetPos() + upperArms[static_cast<int>(HandSide::Right)]->GetHandWorldPos();
+	}
 }
 
 void Humanoid::SetHoldObject(HandSide hand, GameObject* obj)
@@ -128,6 +136,11 @@ void UpperArm::SetHoldObject(GameObject* obj)
 	this->lowerArm->SetHoldObject(obj);
 }
 
+Vector3 UpperArm::GetHandWorldPos()
+{
+	return this->GetPos() + this->lowerArm->GetPos();
+}
+
 LowerArm::LowerArm(Vector3 initPos) : GameObject(initPos)
 {
 	Cube* arm = new Cube(Vector3{ 0.f, -0.25f, 0.f }, 0.5f, TextureStore::SkinCube);
@@ -146,6 +159,11 @@ GameObject* LowerArm::GetHoldObject()
 void LowerArm::SetHoldObject(GameObject* obj)
 {
 	this->hand->SetHoldObject(obj);
+}
+
+Vector3 LowerArm::GetHandWorldPos()
+{
+	return this->GetPos() + this->hand->GetPos();
 }
 
 Hand::Hand(Vector3 initPos) : GameObject(initPos)

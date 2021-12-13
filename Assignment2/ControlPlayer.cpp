@@ -14,7 +14,7 @@ ControlPlayer::ControlPlayer(Vector3 initPos) : HumanoidPlayer(initPos)
 bool ControlPlayer::Tick()
 {
 	bool dirty = false;
-	KeyboardStatus* key = Engine::GetKeyboardStatus();
+	InputStatus* key = Engine::GetKeyboardStatus();
 	//std::cout << key->Forward << "	" << key->Backward << "	" << key->Left << "	" << key->Right << std::endl;
 
 	GLfloat step = 0.5f;
@@ -55,12 +55,51 @@ bool ControlPlayer::Tick()
 		dirty = true;
 	}
 
+	if (key->MouseLeftBtn)
+	{
+		this->GetHoldGun()->Fire(this->GetLookAtVector());
+	}
+	if (key->MouseRightBtn)
+	{
+		this->rmbPressed = true;
+	}
+	else
+	{
+		if (this->rmbPressed)
+		{
+			this->scopeOpend = !this->scopeOpend;
+		}
+		this->rmbPressed = false;
+	}
+
+	if (key->R)
+	{
+		this->GetHoldGun()->ReloadAmmo();
+	}
+
 	if (dirty)
 	{
 		this->Move(moveVec);
 	}
 
 	return HumanoidPlayer::Tick() || dirty;
+}
+
+Gun* ControlPlayer::GetHoldGun()
+{
+	return (Gun*) this->GetHoldObject();
+}
+
+Vector3 ControlPlayer::getCameraOffset()
+{
+	if (this->scopeOpend)
+	{
+		return Vector3{ 0.45f, 0.6f, 0.35f };
+	}
+	else
+	{
+		return HumanoidPlayer::getCameraOffset();
+	}
 }
 
 

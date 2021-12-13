@@ -86,3 +86,13 @@ Vector3 LightGameEngine::EngineBasis::GetVectorFromYawAndPitch(GLfloat yaw, GLfl
 		1.f * cosf(pitchInRadian) * sinf(yawInRadian)   //z
 	};
 }
+
+Vector2_struct LightGameEngine::Vector2_struct::Rotate(GLfloat degree)
+{
+	GLfloat radian = M_PI * degree / 180.f;
+	return Vector2_struct
+	{
+		this->x * cosf(radian) - this->y * sinf(radian),
+		this->x * sinf(radian) + this->y * cosf(radian)
+	};
+}

@@ -20,9 +20,9 @@ Texture::Texture(GLubyte* buffer, GLuint width, GLuint height, GLenum format)
 	glBindTexture(GL_TEXTURE_2D, this->Name);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, 4, width, height, format, GL_UNSIGNED_BYTE, buffer);
 
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -68,7 +68,7 @@ Texture* Texture::LoadTexture(const std::wstring& texturePath)
 
 		EngineUtil::ThrowIfFail(pDecoder->GetFrame(0, &pFrame));
 
-		// Convert to BGRA format
+		// Convert to RGBA format
 		pWICFactory->CreateFormatConverter(&pConverter);
 		EngineUtil::ThrowIfFail(pConverter->Initialize(
 			pFrame,							// Input bitmap source

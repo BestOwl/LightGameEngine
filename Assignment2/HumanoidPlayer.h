@@ -18,10 +18,13 @@ public:
     virtual void SetOnTerrain(Terrain* terrain);
 
     GameObject* GetHoldObject();
+    Vector3 GetHoldObjectWorldPos();
     void SetHoldObject(GameObject* obj);
 
 protected:
     Humanoid* body;
     Terrain* onTerrain;
     GLfloat moveSpeed = 0.5f;
+
+    virtual Vector3 getCameraOffset();
 };

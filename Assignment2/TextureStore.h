@@ -21,6 +21,7 @@ public:
 	static CubeTexture* MetalCube;
 	static CubeTexture* UpperArmCube;
 	static CubeTexture* SkinCube;
+	static CubeTexture* ReadPointScope;
 
 	static Texture* Terrain;
 	static Texture* Head;
@@ -28,4 +29,5 @@ public:
 	static Texture* AkMag;
 	static Texture* Cloth;
 	static Texture* Skin;
+	static Texture* AkOrtho;
 };

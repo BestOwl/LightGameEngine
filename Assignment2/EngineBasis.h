@@ -17,12 +17,19 @@ namespace LightGameEngine
 		bool Left;
 		bool Right;
 		bool Space;
-	} KeyboardStatus;
+		bool R;
+
+		bool MouseLeftBtn;
+		bool MouseMiddleBtn;
+		bool MouseRightBtn;
+	} InputStatus;
 
 	struct Vector2_struct
 	{
 		GLfloat x;
 		GLfloat y;
+
+		Vector2_struct Rotate(GLfloat degree);
 	};
 	typedef Vector2_struct Vector2;
 

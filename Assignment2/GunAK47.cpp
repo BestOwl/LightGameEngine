@@ -7,11 +7,15 @@
 using namespace LightGameEngine;
 using namespace LightGameEngine::GeometricPrimitives;
 
-GunAK47::GunAK47(Vector3 initPos) : Gun(initPos)
+GunAK47::GunAK47(Vector3 initPos) : Gun(initPos, 30)
 {
 	Cube* body = new Cube(Vector3{ 0, 0, 0 }, 1, TextureStore::Ak);
 	body->Scale = Vector3{ 0.8, 0.1, 0.1 };
 	this->ChildrenObjects.push_back(body);
+
+	Cube* scope = new Cube(Vector3{ 0.05f, 0.1f, 0.f }, 0.1f, TextureStore::ReadPointScope);
+	scope->Scale.x = 0.2f;
+	this->ChildrenObjects.push_back(scope);
 
 	Cylinder* barrel = new Cylinder(Vector3{ 0.3f, -0.01f, 0 }, 0.015f, 0.5f, Vector3{ 1, 0, 0 }, TextureStore::Metal);
 	this->ChildrenObjects.push_back(barrel);
