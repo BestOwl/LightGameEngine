@@ -10,8 +10,11 @@
 
 using namespace LightGameEngine;
 
+
 namespace LightGameEngine
 {
+	class GameObject;
+
 	class AABBox
 	{
 	public:
@@ -19,6 +22,7 @@ namespace LightGameEngine
 
 		Vector3 MinPos;
 		Vector3 MaxPos;
+		GameObject* Obj;
 
 		bool ToBeDestoryed = false;
 	};

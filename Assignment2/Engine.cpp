@@ -27,6 +27,7 @@ static Cube* _skybox;
 static InputStatus keyboardStatus;
 static bool isPause;
 static std::function<void()> _renderOverlayUICallback;
+static std::function<void()> _timerCallback;
 static BitmapFont* debugFont;
 
 // fps
@@ -150,6 +151,11 @@ void LightGameEngine::Engine::RenderOverlayUICallback(std::function<void()> func
 	_renderOverlayUICallback = func;
 }
 
+void LightGameEngine::Engine::TimerCallback(std::function<void()> func)
+{
+	_timerCallback = func;
+}
+
 void RenderScene()
 {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -252,7 +258,10 @@ void RenderScene()
 		pfc_counter_last = pfc_counter;
 	}
 
-	_renderOverlayUICallback();
+	if (_renderOverlayUICallback)
+	{
+		_renderOverlayUICallback();
+	}
 
 
 #ifdef _DEBUG
@@ -303,6 +312,7 @@ void RenderGameObject(GameObject* obj)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
+#ifdef _DEBUG
 	AABBox* aabb = obj->GetAABbox();
 	if (aabb != NULL)
 	{
@@ -326,6 +336,7 @@ void RenderGameObject(GameObject* obj)
 
 		glEnd();
 	}
+#endif // _DEBUG
 
 	Vector3 pos = obj->GetPos();
 	glTranslatef(pos.x, pos.y, pos.z);
@@ -409,6 +420,11 @@ void OnTimer(int value)
 		if (dirty)
 		{
 			glutPostRedisplay();
+		}
+
+		if (_timerCallback)
+		{
+			_timerCallback();
 		}
 	}
 	

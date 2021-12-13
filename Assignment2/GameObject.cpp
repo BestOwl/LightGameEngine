@@ -36,6 +36,7 @@ void LightGameEngine::GameObject::SetAABbox(AABBox box)
 	{
 		relativeAabb = new AABBox(box.MinPos, box.MaxPos);
 		aabb = new AABBox(this->GetPos() + box.MinPos, this->GetPos() + box.MaxPos);
+		aabb->Obj = this;
 		CollisionEngine::GetInstance()->AabbBoxes.push_back(aabb);
 	}
 }
@@ -95,7 +96,10 @@ bool GameObject::Tick()
 				AABBox* aabb = CollisionEngine::GetInstance()->HitTest(this->aabb);
 				if (aabb != nullptr)
 				{
-					printf_s("Hit!\n");
+					if (aabb->Obj != nullptr)
+					{
+						this->OnHit(aabb->Obj);
+					}
 				}
 			}
 

@@ -47,6 +47,11 @@ bool LightGameEngine::operator==(const Vector3& vec3L, const Vector3& vec3R)
 void Vector3_struct::ScaleTo(GLfloat norm)
 {
 	GLfloat originNorm = this->GetNorm();
+	if (originNorm == 0)
+	{
+		return;
+	}
+
 	GLfloat scale = norm / originNorm;
 
 	this->x = this->x * scale;
@@ -56,7 +61,13 @@ void Vector3_struct::ScaleTo(GLfloat norm)
 
 Vector3_struct LightGameEngine::Vector3_struct::Scale(GLfloat norm)
 {
-	GLfloat scale = norm / this->GetNorm();
+	GLfloat ogNorm = this->GetNorm();
+	if (norm == 0)
+	{
+		return Vector3{0, 0, 0};
+	}
+
+	GLfloat scale = norm / ogNorm;
 	return Vector3_struct{ this->x * scale, this->y * scale, this->z * scale };
 }
 

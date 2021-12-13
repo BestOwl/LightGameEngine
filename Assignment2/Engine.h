@@ -37,6 +37,7 @@ namespace LightGameEngine
 		static bool GetPauseState();
 
 		static void RenderOverlayUICallback(std::function<void()> func);
+		static void TimerCallback(std::function<void()> func);
 
 	};
 	
