@@ -46,11 +46,10 @@ namespace LightGameEngine
 		Vector3 Speed;
 
 		GLfloat Gravity = 0.3f;
+		GLfloat AirDrag = 0.1f;
 
 		Vector3 Acceleration;
 		Vector3 GetActualAcceleration();
-
-		//GLflaot AirDragX = (1 / 2) * 1.293 *
 
 		/// <summary>
 		/// If ture, this object will be removed from scene and destroyed at next Tick

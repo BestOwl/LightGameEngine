@@ -1,5 +1,6 @@
 #include "ControlPlayer.h"
 #include "Engine.h"
+#include "Bullet.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -57,7 +58,11 @@ bool ControlPlayer::Tick()
 
 	if (key->MouseLeftBtn)
 	{
-		this->GetHoldGun()->Fire(this->GetLookAtVector());
+		bool fireSuccessful = this->GetHoldGun()->Fire();
+		if (fireSuccessful)
+		{
+			Engine::AddSceneObject(new Bullet(this->GetPos(), this->GetLookAtVector()));
+		}
 	}
 	if (key->MouseRightBtn)
 	{

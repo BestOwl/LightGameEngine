@@ -78,6 +78,9 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>GeometricPrimitives</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -135,6 +138,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Humanoid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

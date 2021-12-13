@@ -6,6 +6,19 @@ Gun::Gun(Vector3 initPos, GLuint magCapacity) : GameObject(initPos)
 	this->magAmmo = magCapacity;
 }
 
+bool Gun::Tick()
+{
+	if (cooling != 0)
+	{
+		cooling++;
+		if (cooling == coolingTime)
+		{
+			cooling = 0;
+		}
+	}
+	return false;
+}
+
 GLuint Gun::GetAmmoCapacity()
 {
 	return this->magAmmoCapacity;
@@ -21,10 +34,13 @@ void Gun::ReloadAmmo()
 	this->magAmmo = this->magAmmoCapacity;
 }
 
-void Gun::Fire(Vector3 direction)
+bool Gun::Fire()
 {
-	if (this->magAmmo > 0)
+	if (this->magAmmo > 0 && cooling == 0)
 	{
 		this->magAmmo--;
+		this->cooling = 1;
+		return true;
 	}
+	return false;
 }

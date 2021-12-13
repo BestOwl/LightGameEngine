@@ -21,9 +21,9 @@ Vector3 LightGameEngine::GameObject::GetActualAcceleration()
 {
 	return 
 	{
-		this->Acceleration.x - this->Speed.x * 0.1f,
-		this->Acceleration.y - this->Speed.y * 0.1f - this->Gravity, // origin AccelerateY - air drag - gravity
-		this->Acceleration.z - this->Speed.z * 0.1f
+		this->Acceleration.x - this->Speed.x * this->AirDrag,
+		this->Acceleration.y - this->Speed.y * this->AirDrag - this->Gravity, // origin AccelerateY - air drag - gravity
+		this->Acceleration.z - this->Speed.z * this->AirDrag
 	};
 }
 
