@@ -22,32 +22,32 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{ee045b48-442e-4bc4-83f9-a18906241b41}</ProjectGuid>
-    <RootNamespace>Assignment2</RootNamespace>
+    <RootNamespace>LightGameEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>LightGameEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -73,15 +73,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
@@ -99,6 +103,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,57 +162,35 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AABBox.cpp" />
-    <ClCompile Include="BotPlayer.cpp" />
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="CollisionEngine.cpp" />
-    <ClCompile Include="ControlPlayer.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="EngineBasis.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Gun.cpp" />
-    <ClCompile Include="GunAK47.cpp" />
-    <ClCompile Include="Humanoid.cpp" />
-    <ClCompile Include="HumanoidPlayer.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EngineUtil.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="PlayerBase.cpp" />
     <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="Teapot.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureStore.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AABBox.h" />
-    <ClInclude Include="BotPlayer.h" />
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="CollisionEngine.h" />
-    <ClInclude Include="ControlPlayer.h" />
-    <ClInclude Include="Cube.h" />
-    <ClInclude Include="Cylinder.h" />
-    <ClInclude Include="EngineBasis.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Engine.h" />
-    <ClInclude Include="EngineUtil.h" />
-    <ClInclude Include="Gun.h" />
-    <ClInclude Include="GunAK47.h" />
-    <ClInclude Include="Humanoid.h" />
-    <ClInclude Include="HumanoidPlayer.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="PlayerBase.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="Teapot.h" />
-    <ClInclude Include="Terrain.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureStore.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Assets\heightmap.png" />
-    <Image Include="Assets\skybox.jpg" />
+    <ClInclude Include="include\AABBox.h" />
+    <ClInclude Include="include\CollisionEngine.h" />
+    <ClInclude Include="include\Cube.h" />
+    <ClInclude Include="include\Cylinder.h" />
+    <ClInclude Include="include\Engine.h" />
+    <ClInclude Include="include\EngineBasis.h" />
+    <ClInclude Include="include\EngineUtil.h" />
+    <ClInclude Include="include\GameObject.h" />
+    <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\PlayerBase.h" />
+    <ClInclude Include="include\Sphere.h" />
+    <ClInclude Include="include\Terrain.h" />
+    <ClInclude Include="include\Texture.h" />
+    <ClInclude Include="include\TextureStore.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
